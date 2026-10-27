@@ -20,6 +20,7 @@ import { OrbitSimulator } from '@/components/interactive/OrbitSimulator';
 import { TiltFlashlight } from '@/components/interactive/TiltFlashlight';
 import { SeasonsCompare } from '@/components/interactive/SeasonsCompare';
 import { DayNightScale } from '@/components/interactive/DayNightScale';
+import { MasterQuiz } from '@/components/interactive/MasterQuiz';
 
 function MissionStepContent() {
   const params = useParams<{ etapa: string }>();
@@ -73,6 +74,8 @@ function MissionStepContent() {
         return <SeasonsCompare />;
       case 5:
         return <DayNightScale />;
+      case 6:
+        return <MasterQuiz />;
       default:
         return null;
     }

@@ -501,6 +501,84 @@ export const MissionBadge: React.FC<MissionBadgeProps> = ({
           </g>
         );
 
+      case 6:
+        // BADGE 6: CAMPEÃO SUPREMO (Coroa de Ouro com Estrela Radiante e Laurel de Vitória)
+        return (
+          <g>
+            <defs>
+              <linearGradient id="goldCrownGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#fef08a" />
+                <stop offset="35%" stopColor="#f59e0b" />
+                <stop offset="70%" stopColor="#d97706" />
+                <stop offset="100%" stopColor="#b45309" />
+              </linearGradient>
+              <linearGradient id="shieldGrad6" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#451a03" />
+                <stop offset="50%" stopColor="#78350f" />
+                <stop offset="100%" stopColor="#b45309" />
+              </linearGradient>
+            </defs>
+
+            {/* Escudo Estelar Dourado */}
+            <path
+              d="M 18 35 Q 70 15 122 35 Q 128 85 70 125 Q 12 85 18 35 Z"
+              fill={isUnlocked ? 'url(#shieldGrad6)' : '#334155'}
+              stroke={isUnlocked ? 'url(#goldCrownGrad)' : '#64748b'}
+              strokeWidth="4"
+              filter="drop-shadow(0px 4px 6px rgba(0,0,0,0.3))"
+            />
+
+            {/* Coroa Real no centro */}
+            <path
+              d="M 40 85 L 35 48 L 52 64 L 70 42 L 88 64 L 105 48 L 100 85 Z"
+              fill={isUnlocked ? 'url(#goldCrownGrad)' : '#64748b'}
+              stroke={isUnlocked ? '#fef08a' : '#94a3b8'}
+              strokeWidth="2"
+            />
+
+            {/* Joias da coroa */}
+            {isUnlocked && (
+              <g>
+                <circle cx="35" cy="46" r="3.5" fill="#ef4444" />
+                <circle cx="70" cy="40" r="4.5" fill="#38bdf8" />
+                <circle cx="105" cy="46" r="3.5" fill="#ef4444" />
+                <circle cx="52" cy="74" r="3" fill="#22c55e" />
+                <circle cx="70" cy="74" r="3.5" fill="#fef08a" />
+                <circle cx="88" cy="74" r="3" fill="#a855f7" />
+              </g>
+            )}
+
+            {/* Estrela de Vitória Brilhante */}
+            <polygon
+              points="70,18 72,23 77,23 73,26 75,31 70,28 65,31 67,26 63,23 68,23"
+              fill={isUnlocked ? '#fef08a' : '#64748b'}
+            />
+
+            {/* Faixa inferior */}
+            <rect
+              x="18"
+              y="102"
+              width="104"
+              height="20"
+              rx="4"
+              fill={isUnlocked ? '#b45309' : '#475569'}
+              stroke={isUnlocked ? '#fde047' : '#64748b'}
+              strokeWidth="1.5"
+            />
+            <text
+              x="70"
+              y="116"
+              textAnchor="middle"
+              fill="#ffffff"
+              fontSize="6.8"
+              fontWeight="900"
+              letterSpacing="0.6"
+            >
+              CAMPEÃO SUPREMO
+            </text>
+          </g>
+        );
+
       default:
         return null;
     }

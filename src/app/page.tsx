@@ -43,89 +43,105 @@ interface LearningSummaryItem {
 const LEARNING_SUMMARIES: LearningSummaryItem[] = [
   {
     id: 1,
-    title: 'O Mito da Distância Desvendado',
+    title: 'O Mito do Sol Derrubado!',
     badgeName: 'Detetive do Espaço',
     keyTakeaway:
-      'O calor e o frio das estações NÃO dependem da distância da Terra ao Sol! A Terra até fica mais perto do Sol em janeiro (no periélio), em pleno inverno europeu. O verdadeiro segredo é o eixo inclinado de 23,5° somado à viagem de translação!',
+      'Muita gente achava que no Verão a Terra chegava mais perto do Sol, mas isso é só um boato! Em janeiro a Terra até fica um pouquinho mais perto do Sol, e mesmo assim é inverno na Europa. O verdadeiro segredo é que a Terra viaja pelo espaço meio deitadinha!',
     coreConcepts: [
-      'A órbita quase circular da Terra',
-      'Desmistificação: distância não cria estações',
-      'A dupla dinâmica: Translação + Eixo Inclinado',
+      'A Terra não chega muito perto nem longe do Sol',
+      'O calor não depende da distância',
+      'O planeta viaja meio inclinado no espaço',
     ],
     scientificFact:
-      'A diferença de distância entre o ponto mais próximo e mais distante do Sol é de apenas 3%, o que é insuficiente para mudar as estações do ano.',
+      'A pista de corrida da Terra no espaço é quase um círculo perfeitinho, então a distância do Sol quase não muda!',
     emoji: '🕵️‍♂️',
     colorTheme: 'from-indigo-900 to-slate-900',
     borderTheme: 'border-indigo-400',
   },
   {
     id: 2,
-    title: 'A Grande Viagem de 365 Dias e 6 Horas',
+    title: 'A Viagem do Ano e o Dia Extra de Fevereiro!',
     badgeName: 'Piloto de Órbita',
     keyTakeaway:
-      'A Terra viaja sem parar pelo espaço numa órbita suave. Para completar uma volta inteira ao redor do Sol (Translação), ela gasta exatamente 365 dias e quase 6 horas extras. Ao juntarmos essas 6 horas durante 4 anos seguidos, criamos 24 horas (1 dia completo), dando origem ao Ano Bissexto com 29 de fevereiro!',
+      'A Terra dá uma volta completa ao redor do Sol que dura 365 dias (o ano todinho!), mas sobram 6 horinhas em cada volta. Ao juntar essas 6 horas durante 4 anos, somamos 24 horas (um dia novinho!), que é o dia 29 de fevereiro no Ano Bissexto!',
     coreConcepts: [
-      'Movimento de Translação (1 ano completo)',
-      'As 6 horas excedentes por volta orbital',
-      'Cálculo e lógica do Ano Bissexto (4 × 6h = 24h)',
+      'Translação: 1 volta completa no Sol = 1 ano',
+      'As 6 horas que sobram a cada ano',
+      'A mágica do Ano Bissexto: 4 vezes 6h = 24h (1 dia)',
     ],
     scientificFact:
-      'A Terra viaja a uma incrível velocidade média de aproximadamente 107.000 km/h ao longo da sua órbita no espaço!',
+      'Enquanto você lê isso, a Terra está voando pelo espaço a mais de 100 mil quilômetros por hora sem você nem sentir!',
     emoji: '🛸',
     colorTheme: 'from-teal-950 to-slate-900',
     borderTheme: 'border-teal-400',
   },
   {
     id: 3,
-    title: 'O Ângulo Mágico dos 23,5 Graus',
+    title: 'O Truque da Lanterna e dos 23,5 Graus!',
     badgeName: 'Mestre da Luz Solar',
     keyTakeaway:
-      'Se a Terra girasse reta em pé, o Sol bateria sempre igual e não existiriam estações! Como o eixo é inclinado em 23,5°, a luz do Sol atinge a superfície com inclinações diferentes: raios diretos e perpendiculares concentram toda a energia numa área pequena (faz calor de Verão); raios oblíquos e inclinados espalham a mesma luz por uma área muito maior, aquecendo bem menos (faz frio de Inverno)!',
+      'Pensa numa lanterna no escuro: se você mirar ela reta para o chão, a luz fica concentrada e quentinha (é o Verão!). Se você inclinar a lanterna, a luz se estica, fica espalhada e fraquinha (é o Inverno!). A Terra é meio inclinada, por isso o Sol bate diferente em cada lugar!',
     coreConcepts: [
-      'Inclinação axial constante de 23,5°',
-      'Concentração de energia em raios verticais (90°)',
-      'Dispersão térmica em raios rasantes e oblíquos',
+      'A Terra fica meio deitadinha (23,5 graus)',
+      'Luz que bate reta esquenta muito (Verão)',
+      'Luz que bate de lado espalha e fica fraca (Inverno)',
     ],
     scientificFact:
-      'A mesma lanterna apontada reta ilumina um círculo pequeno e quente; quando inclinada, a luz estica numa oval fria e difusa.',
+      'Se a Terra ficasse totalmente em pé, todos os dias do ano teriam exatamente o mesmo clima para sempre!',
     emoji: '🔦',
     colorTheme: 'from-amber-950 to-slate-900',
     borderTheme: 'border-amber-400',
   },
   {
     id: 4,
-    title: 'O Espelho Planetário: Sul vs Norte',
+    title: 'O Espelho da Terra: Brasil vs Portugal!',
     badgeName: 'Guardião das Estações',
     keyTakeaway:
-      'Os dois lados da Terra funcionam como um espelho simultâneo! Quando o Hemisfério Sul está inclinado para o Sol e vive o Verão (árvores frondosas e dias quentes), o Hemisfério Norte está inclinado para longe e vive o Inverno (árvores despidas e frio rigoroso). Da mesma forma, quando aqui é Outono com folhas caindo, lá é Primavera com flores desabrochando!',
+      'A Terra tem duas metades que funcionam ao contrário como um espelho! Quando no Brasil estamos na praia de calção no Verão, lá na Europa as crianças usam luvas e casacos pesados no Inverno. E quando as folhas caem no Outono aqui, lá é Primavera cheia de flores!',
     coreConcepts: [
-      'Oposição das estações entre Norte e Sul',
-      'Ciclo botânico das árvores e folhas ao longo do ano',
-      'Adaptação biológica: hibernação, floração e queda foliar',
+      'Metade de baixo (Sul) e metade de cima (Norte)',
+      'Quando um lado esquenta, o outro lado esfria',
+      'As folhas nascem na Primavera e caem no Outono',
     ],
     scientificFact:
-      'Quando comemoramos o Natal em 25 de Dezembro com calor e praia no Brasil, em Portugal e nos Estados Unidos é inverno com neve e casacos!',
+      'No Natal, em 25 de Dezembro, as pessoas no Brasil comem frutas geladas no calor, enquanto nos Estados Unidos montam bonecos de neve!',
     emoji: '🌦️',
     colorTheme: 'from-emerald-950 to-slate-900',
     borderTheme: 'border-emerald-400',
   },
   {
     id: 5,
-    title: 'A Balança do Tempo: Solstícios e Equinócios',
+    title: 'O Cabo de Guerra das 24 Horas!',
     badgeName: 'Astrónomo Chefe',
     keyTakeaway:
-      'O início de cada estação tem um nome científico especial baseado na balança das 24 horas. Nos SOLSTÍCIOS temos o dia mais longo do ano (cerca de 14h de sol no Verão) ou a noite mais longa do ano (Inverno). Nos EQUINÓCIOS (latim aequus + nox = noites iguais) há um empate cósmico perfeito: o dia e a noite têm exatamente 12 horas cada em qualquer parte do planeta!',
+      'No Solstício de Verão, o Sol vence com folga: temos 14 horas de sol quentinho para brincar e uma noite curta! No Solstício de Inverno, a noite vence com 14 horas de escuridão. E nos Equinócios dá empate perfeito: são exatamente 12 horas de dia e 12 horas de noite para todo mundo!',
     coreConcepts: [
-      'Solstício de Verão (14h luz / 10h noite)',
-      'Solstício de Inverno (10h luz / 14h noite)',
-      'Equinócios de Primavera e Outono (12h / 12h perfeitos)',
-      'Fenômenos polares: Sol da Meia-Noite e Noite Polar',
+      'Solstício de Verão: o dia mais longo do ano',
+      'Solstício de Inverno: a noite mais longa do ano',
+      'Equinócio: o grande empate de 12 horas de Sol e 12 horas de Lua',
     ],
     scientificFact:
-      'Durante o solstício de verão nos polos, o Sol não se põe durante 24 horas seguidas, dando uma volta completa de 360° no horizonte.',
+      'Nos polos da Terra, no auge do verão, o Sol não se põe nem à meia-noite! O céu continua clarinho durante a noite inteira.',
     emoji: '⚖️',
     colorTheme: 'from-purple-950 to-slate-900',
     borderTheme: 'border-purple-400',
+  },
+  {
+    id: 6,
+    title: 'O Grande Quiz dos Mestres do Espaço!',
+    badgeName: 'Campeão Supremo',
+    keyTakeaway:
+      'Parabéns! Você provou que é um verdadeiro gênio da Terra e do Sol! Agora você sabe tudo sobre o mito da distância, a viagem dos 365 dias, o ano bissexto, a lanterna inclinadinha em 23,5°, o espelho do Brasil e da Europa e o empate das 12 horas nos equinócios!',
+    coreConcepts: [
+      'Revisão completa de todas as 5 missões',
+      'Desafios e perguntas dos mestres respondidos',
+      'Medalha e Coroa de Campeão Supremo conquistadas!',
+    ],
+    scientificFact:
+      'Completando as 6 missões, você adquiriu conhecimentos reais que muitos adultos ainda se confundem!',
+    emoji: '🏆',
+    colorTheme: 'from-amber-950 to-slate-900',
+    borderTheme: 'border-amber-400',
   },
 ];
 
@@ -133,12 +149,10 @@ export default function HomePage() {
   const { completedMissions, resetProgress, largeTextMode } = useProgressStore();
   const allCompleted = completedMissions.length === MISSION_STEPS.length;
 
-  // Sistema de Pontuação e XP (200 XP por missão)
   const currentXP = completedMissions.length * 200;
-  const maxXP = 1000;
+  const maxXP = 1200;
   const progressPercentage = Math.round((completedMissions.length / MISSION_STEPS.length) * 100);
 
-  // Estado dos cartões do resumo expandidos no mobile
   const [expandedSummaryId, setExpandedSummaryId] = useState<number | null>(
     completedMissions.length > 0 ? completedMissions[0] : 1
   );
@@ -153,37 +167,43 @@ export default function HomePage() {
         return {
           title: 'Explorador Aprendiz',
           icon: '🔭',
-          desc: 'Pronto para desvendar os segredos do cosmos!',
+          desc: 'Pronto para desvendar os segredos do espaço!',
         };
       case 1:
         return {
-          title: 'Detetive Solar',
+          title: 'Detetive do Sol',
           icon: '🔍',
-          desc: 'Derrubaste o mito da distância!',
+          desc: 'Você descobriu o mito da distância!',
         };
       case 2:
         return {
-          title: 'Piloto de Órbita',
+          title: 'Piloto das Estrelas',
           icon: '🛸',
-          desc: 'Dominaste os 365 dias e o ano bissexto!',
+          desc: 'Você aprendeu os 365 dias e o ano bissexto!',
         };
       case 3:
         return {
-          title: 'Físico da Luz Solar',
+          title: 'Mestre da Lanterna Solar',
           icon: '☀️',
-          desc: 'Desvendaste o ângulo de 23,5 graus!',
+          desc: 'Você entendeu a Terra inclinadinha!',
         };
       case 4:
         return {
           title: 'Guardião das Quatro Estações',
           icon: '🌍',
-          desc: 'Mestre do espelho planetário Norte vs Sul!',
+          desc: 'Você sabe como o Brasil e a Europa são opostos!',
         };
       case 5:
         return {
-          title: 'Grande Mestre Cósmico da Terra',
+          title: 'Mestre dos Astros e das Horas',
+          icon: '⚖️',
+          desc: 'Você domina os Solstícios e Equinócios!',
+        };
+      case 6:
+        return {
+          title: 'Grande Campeão Supremo do Espaço',
           icon: '👑',
-          desc: 'Conhecimento total dos Solstícios, Equinócios e das 4 Estações!',
+          desc: 'Você zerou todas as missões e venceu o Grande Quiz!',
         };
       default:
         return {
@@ -197,21 +217,21 @@ export default function HomePage() {
   const rank = getScientistRank();
 
   const audioSummaryText = completedMissions.length > 0
-    ? `Resumo das tuas aprendizagens espaciais! Tens ${currentXP} pontos de experiência no nível ${rank.title}. Já conquistaste ${completedMissions.length} medalhas oficiais. Revê abaixo todas as descobertas científicas que desbloqueaste na tua jornada!`
-    : 'Bem-vindo ao laboratório das estações do ano! Completa as missões espaciais para somar pontos de experiência, forjar medalhas oficiais e desbloquear o teu resumo científico de aprendizagens!';
+    ? `Resumo das suas aventuras no espaço! Você tem ${currentXP} pontos no nível ${rank.title}. Já conquistou ${completedMissions.length} medalhas! Toque abaixo para ouvir e ler o que você aprendeu em cada missão!`
+    : 'Bem-vindo ao laboratório das estações do ano! Faça as missões para ganhar pontos, conquistar medalhas douradas e descobrir os segredos da Terra!';
 
   return (
     <div className="space-y-6 sm:space-y-12">
-      {/* BANNER PRINCIPAL HERO COM RESPONSIVIDADE MOBILE NATIVA */}
+      {/* BANNER PRINCIPAL COM LINGUAGEM DIVERTIDA PARA CRIANÇAS */}
       <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-950 via-slate-900 to-purple-950 text-white p-5 sm:p-10 shadow-2xl border-3 sm:border-4 border-indigo-300/40">
         <div className="relative z-10 max-w-3xl space-y-3.5 sm:space-y-5">
           <div className="inline-flex items-center gap-1.5 sm:gap-2 px-3 py-1 rounded-full bg-white/15 backdrop-blur-md text-amber-300 text-[11px] sm:text-xs font-black uppercase tracking-wider border border-white/20">
             <Sparkles className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-            <span className="truncate">Laboratório Interativo de Astronomia</span>
+            <span>Laboratório Espacial das Crianças</span>
           </div>
 
           <h1 className="text-2xl sm:text-4xl md:text-5xl font-black tracking-tight leading-tight">
-            As Estações do Ano: Como Funciona o Clima na Terra?
+            As Estações do Ano: Por que o Clima Muda na Terra?
           </h1>
 
           <p
@@ -219,7 +239,7 @@ export default function HomePage() {
               largeTextMode ? 'text-lg sm:text-xl' : 'text-xs sm:text-base md:text-lg'
             }`}
           >
-            Navega pelos mistérios do movimento da Terra, desfaz mitos e descobre na prática como a translação, o eixo inclinado de 23,5°, os solstícios e os equinócios transformam a natureza ao nosso redor!
+            Venha viajar pelo espaço! Descubra de um jeito muito fácil e divertido por que faz calor no Verão, friozinho no Inverno, ventinho no Outono e flores na Primavera!
           </p>
 
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2">
@@ -228,25 +248,25 @@ export default function HomePage() {
               className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-amber-400 hover:bg-amber-300 active:scale-95 text-slate-950 font-black text-sm sm:text-base transition-all shadow-xl cursor-pointer w-full sm:w-auto"
             >
               <Rocket className="w-5 h-5 fill-current shrink-0" />
-              <span>{completedMissions.length > 0 ? 'Continuar Exploração' : 'Começar pela Missão 1'}</span>
+              <span>{completedMissions.length > 0 ? 'Continuar Aventura' : 'Começar pela Missão 1'}</span>
             </Link>
 
             <AudioButton
               text={audioSummaryText}
-              label="Ouvir Resumo da Página"
+              label="Ouvir Explicação da Página"
               size="md"
             />
           </div>
         </div>
 
-        {/* Ilustração Decorativa Cósmica (Desktop e Tablet) */}
+        {/* Ilustração Decorativa Cósmica */}
         <div className="hidden md:flex flex-col items-center justify-center absolute right-8 lg:right-12 top-1/2 -translate-y-1/2 select-none pointer-events-none opacity-90">
           <div className="text-7xl lg:text-8xl animate-pulse">☀️</div>
           <div className="text-5xl lg:text-6xl -mt-4 ml-20 drop-shadow-2xl">🌍</div>
         </div>
       </section>
 
-      {/* PAINEL 1: PONTUAÇÃO, XP E PATENTE CIENTÍFICA (MOBILE-FIRST) */}
+      {/* PAINEL 1: PONTUAÇÃO E NÍVEL DA CRIANÇA */}
       <section className="bg-white rounded-3xl p-4 sm:p-8 border-3 sm:border-4 border-amber-200 shadow-xl space-y-4 sm:space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4 sm:pb-5">
           <div className="flex items-center gap-3">
@@ -257,7 +277,7 @@ export default function HomePage() {
               <div className="flex items-center gap-1.5">
                 <Zap className="w-3.5 h-3.5 text-amber-600 fill-amber-500 shrink-0" />
                 <span className="text-[10px] sm:text-xs font-black uppercase tracking-wider text-amber-700">
-                  Pontuação e Nível do Aluno
+                  Seus Pontos e Conquistas
                 </span>
               </div>
               <h2 className="text-xl sm:text-3xl font-black text-slate-900 mt-0.5 leading-snug">
@@ -274,15 +294,15 @@ export default function HomePage() {
               type="button"
               onClick={resetProgress}
               className="self-start sm:self-center inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-slate-100 hover:bg-slate-200 active:scale-95 text-slate-600 font-bold text-xs transition-colors cursor-pointer"
-              title="Zerar pontuação para recomeçar"
+              title="Recomeçar do zero"
             >
               <RotateCcw className="w-3.5 h-3.5" />
-              <span>Reiniciar Progresso</span>
+              <span>Jogar Novamente</span>
             </button>
           )}
         </div>
 
-        {/* Barra de Pontos de Experiência (XP) */}
+        {/* Barra de Pontos */}
         <div className="space-y-2">
           <div className="flex items-center justify-between text-xs sm:text-sm font-black">
             <span className="flex items-center gap-1.5 text-slate-700">
@@ -290,7 +310,7 @@ export default function HomePage() {
               <span>Pontos de Sabedoria</span>
             </span>
             <span className="text-amber-900 bg-amber-100 px-2.5 py-0.5 rounded-full text-[11px] sm:text-xs font-black font-mono">
-              {currentXP} / {maxXP} XP ({progressPercentage}%)
+              {currentXP} de {maxXP} Pontos ({progressPercentage}%)
             </span>
           </div>
 
@@ -301,14 +321,14 @@ export default function HomePage() {
             >
               {progressPercentage >= 20 && (
                 <span className="text-[9px] sm:text-[10px] font-black text-amber-950">
-                  {currentXP} XP
+                  {currentXP} pts
                 </span>
               )}
             </div>
           </div>
         </div>
 
-        {/* 3 Cartões de Estatísticas Adaptáveis */}
+        {/* 3 Cartões Fáceis */}
         <div className="grid grid-cols-3 gap-2 sm:gap-4 pt-1">
           <div className="p-2.5 sm:p-4 rounded-2xl bg-amber-50/80 border sm:border-2 border-amber-200 flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-1 sm:gap-3">
             <span className="text-2xl sm:text-3xl">🏅</span>
@@ -317,7 +337,7 @@ export default function HomePage() {
                 Medalhas
               </span>
               <span className="text-sm sm:text-xl font-black text-amber-950">
-                {completedMissions.length}/{MISSION_STEPS.length}
+                {completedMissions.length} de {MISSION_STEPS.length}
               </span>
             </div>
           </div>
@@ -326,10 +346,10 @@ export default function HomePage() {
             <span className="text-2xl sm:text-3xl">💡</span>
             <div>
               <span className="text-[9px] sm:text-[11px] font-extrabold uppercase text-emerald-800 block">
-                Conceitos
+                Segredos
               </span>
               <span className="text-sm sm:text-xl font-black text-emerald-950">
-                {completedMissions.length * 3} Lições
+                {completedMissions.length * 3} Descobertos
               </span>
             </div>
           </div>
@@ -338,17 +358,17 @@ export default function HomePage() {
             <span className="text-2xl sm:text-3xl">⭐</span>
             <div>
               <span className="text-[9px] sm:text-[11px] font-extrabold uppercase text-indigo-800 block">
-                Grau
+                Nível
               </span>
               <span className="text-sm sm:text-xl font-black text-indigo-950">
-                {completedMissions.length}/5
+                Fase {completedMissions.length}/5
               </span>
             </div>
           </div>
         </div>
       </section>
 
-      {/* PAINEL 2: GALERIA DE MEDALHAS OFICIAIS (CARROSSEL TOUCH MOBILE + GRADE DESKTOP) */}
+      {/* PAINEL 2: GALERIA DE MEDALHAS */}
       <section className="bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white rounded-3xl p-4 sm:p-8 border-3 sm:border-4 border-amber-400/50 shadow-2xl space-y-4 sm:space-y-6">
         <div className="flex flex-wrap items-center justify-between gap-2 sm:gap-4">
           <div className="flex items-center gap-2.5 sm:gap-3">
@@ -357,27 +377,25 @@ export default function HomePage() {
             </div>
             <div>
               <span className="text-[10px] sm:text-xs font-black uppercase tracking-wider text-amber-300 bg-amber-400/20 px-2.5 py-0.5 rounded-full inline-block mb-0.5 border border-amber-300/30">
-                Galeria Oficial
+                Suas Conquistas
               </span>
               <h2 className="text-xl sm:text-3xl font-black">
-                Medalhas Científicas
+                Quadro de Medalhas
               </h2>
             </div>
           </div>
 
           <div className="text-[11px] sm:text-xs font-black px-3 py-1.5 rounded-full bg-white/10 border border-white/20 text-amber-300">
-            {allCompleted ? '👑 Todas Forjadas!' : `${completedMissions.length}/5 Forjadas`}
+            {allCompleted ? '👑 Todas Desbloqueadas!' : `${completedMissions.length}/${MISSION_STEPS.length} Conquistadas`}
           </div>
         </div>
 
-        {/* Dica de toque/deslize para smartphones */}
-        <div className="flex items-center justify-between text-[11px] text-amber-200/90 sm:hidden">
-          <span>👈 Desliza para ver os badges</span>
-          <span>👉</span>
-        </div>
+        <p className="text-xs sm:text-sm text-indigo-200 leading-relaxed max-w-3xl">
+          Complete cada missão para ganhar sua medalha oficial! Deslize com o dedinho para ver todas:
+        </p>
 
-        {/* CONTAINER DO CARROSSEL TOUCH MOBILE / GRADE DESKTOP */}
-        <div className="flex sm:grid sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-6 overflow-x-auto sm:overflow-x-visible snap-x snap-mandatory pb-3 sm:pb-0 -mx-2 px-2 sm:mx-0 sm:px-0">
+        {/* Carrossel Touch */}
+        <div className="flex sm:grid sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-6 overflow-x-auto sm:overflow-x-visible snap-x snap-mandatory pb-3 sm:pb-0 -mx-2 px-2 sm:mx-0 sm:px-0">
           {MISSION_STEPS.map((step) => {
             const isUnlocked = completedMissions.includes(step.id);
 
@@ -410,7 +428,7 @@ export default function HomePage() {
                         : 'bg-white/10 text-slate-400'
                     }`}
                   >
-                    {isUnlocked ? '✓ Forjada' : '🔒 Bloqueada'}
+                    {isUnlocked ? '✓ Ganhou!' : '🔒 Bloqueada'}
                   </span>
                 </div>
               </Link>
@@ -418,7 +436,7 @@ export default function HomePage() {
           })}
         </div>
 
-        {/* Brasão Supremo se todas as missões foram concluídas */}
+        {/* Troféu Final */}
         {allCompleted && (
           <motion.div
             initial={{ scale: 0.95, opacity: 0 }}
@@ -429,25 +447,25 @@ export default function HomePage() {
               <span className="text-4xl sm:text-5xl animate-bounce">👑</span>
               <div>
                 <span className="text-[10px] sm:text-xs font-black uppercase text-amber-300 tracking-wider">
-                  Troféu Máximo
+                  Troféu de Ouro
                 </span>
                 <h4 className="text-lg sm:text-2xl font-black text-white">
-                  Treinamento Completo Concluído!
+                  Parabéns! Você Concluiu Todas as Missões!
                 </h4>
                 <p className="text-xs text-amber-100 mt-0.5">
-                  És um Grande Mestre Cósmico com todas as insígnias forjadas!
+                  Agora você é um Grande Mestre do Espaço e sabe tudo sobre a Terra!
                 </p>
               </div>
             </div>
 
             <span className="px-4 py-2 rounded-full bg-amber-400 text-amber-950 font-black text-xs sm:text-sm shadow-lg shrink-0">
-              🌟 Certificado Ativo
+              🌟 Certificado Campeão
             </span>
           </motion.div>
         )}
       </section>
 
-      {/* PAINEL 3: RESUMO DO QUE FOI APRENDIDO (ACORDEÃO DINÂMICO MOBILE) */}
+      {/* PAINEL 3: O QUE VOCÊ APRENDEU (ACORDEÃO DIVERTIDO) */}
       <section className="bg-white rounded-3xl p-4 sm:p-8 border-3 sm:border-4 border-indigo-200 shadow-xl space-y-4 sm:space-y-6">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-4 sm:pb-5">
           <div className="flex items-center gap-3">
@@ -458,26 +476,26 @@ export default function HomePage() {
               <div className="flex items-center gap-1.5">
                 <BookOpen className="w-3.5 h-3.5 text-indigo-600 shrink-0" />
                 <span className="text-[10px] sm:text-xs font-black uppercase tracking-wider text-indigo-700">
-                  Dossiê Científico
+                  Caderno de Descobertas
                 </span>
               </div>
               <h2 className="text-xl sm:text-3xl font-black text-slate-900 mt-0.5 leading-snug">
-                Resumo do que foi Aprendido
+                O que Você Aprendeu
               </h2>
               <p className="text-xs sm:text-sm text-slate-500 font-semibold line-clamp-1 sm:line-clamp-none">
-                Toca nos cartões para abrir ou fechar as conclusões essenciais de cada missão!
+                Toque nos cartões para abrir os segredos de cada missão!
               </p>
             </div>
           </div>
 
           <AudioButton
-            text="Este é o teu Dossiê Científico com o resumo de tudo o que aprendeste! Podes ler as grandes conclusões sobre o mito da distância, a viagem de 365 dias, o ângulo de vinte e três vírgula cinco graus, a oposição dos hemisférios e o equilíbrio dos solstícios e equinócios."
-            label="Ouvir Resumo Geral das Lições"
+            text="Este é o seu caderno de descobertas! Aqui você pode ler e ouvir de um jeito muito fácil o que aprendeu em cada missão sobre o Sol, a Terra e as estações do ano!"
+            label="Ouvir o que você aprendeu"
             size="sm"
           />
         </div>
 
-        {/* Lista de Cartões Acordeão (Mobile-Friendly) */}
+        {/* Lista de Cartões Acordeão */}
         <div className="space-y-3">
           {LEARNING_SUMMARIES.map((item) => {
             const isUnlocked = completedMissions.includes(item.id);
@@ -492,7 +510,7 @@ export default function HomePage() {
                     : 'bg-slate-50 border-slate-200 text-slate-700'
                 }`}
               >
-                {/* Cabeçalho do Cartão (Acordeão clicável no mobile) */}
+                {/* Cabeçalho do Cartão */}
                 <button
                   type="button"
                   onClick={() => toggleSummaryExpand(item.id)}
@@ -524,12 +542,12 @@ export default function HomePage() {
                     {isUnlocked ? (
                       <span className="hidden sm:inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 text-[11px] font-black">
                         <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                        <span>Adquirido</span>
+                        <span>Aprendido!</span>
                       </span>
                     ) : (
                       <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-slate-200 text-slate-600 text-[11px] font-black">
                         <Lock className="w-3 h-3" />
-                        <span>Bloqueado</span>
+                        <span>Falta Jogar</span>
                       </span>
                     )}
 
@@ -539,7 +557,7 @@ export default function HomePage() {
                   </div>
                 </button>
 
-                {/* Conteúdo Expansível do Resumo */}
+                {/* Conteúdo Expansível com Linguagem Simples */}
                 <AnimatePresence>
                   {isExpanded && (
                     <motion.div
@@ -551,21 +569,21 @@ export default function HomePage() {
                     >
                       {isUnlocked ? (
                         <>
-                          {/* A Grande Conclusão */}
+                          {/* A Grande Conclusão em Linguagem de Criança */}
                           <div className="p-3.5 sm:p-4 rounded-2xl bg-white/10 border border-white/15">
                             <span className="text-[11px] sm:text-xs font-black uppercase text-amber-300 block mb-1">
-                              🎯 A Grande Descoberta:
+                              🎯 O Grande Segredo:
                             </span>
                             <p className="text-xs sm:text-sm text-slate-100 leading-relaxed font-medium">
                               {item.keyTakeaway}
                             </p>
                           </div>
 
-                          {/* Conceitos e Fato Científico */}
+                          {/* Conceitos e Fato Curioso */}
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5 sm:gap-3 text-xs">
                             <div className="p-3 rounded-xl bg-white/5 border border-white/10">
                               <span className="font-extrabold text-amber-300 uppercase block mb-1">
-                                🧠 Conceitos Aprendidos:
+                                🧠 O Que Você Descobriu:
                               </span>
                               <ul className="space-y-1 text-slate-200 font-medium">
                                 {item.coreConcepts.map((concept, cIdx) => (
@@ -579,7 +597,7 @@ export default function HomePage() {
 
                             <div className="p-3 rounded-xl bg-white/5 border border-white/10">
                               <span className="font-extrabold text-sky-300 uppercase block mb-1">
-                                🔬 Facto de Observação:
+                                🔬 Curiosidade Incrível:
                               </span>
                               <p className="text-slate-200 leading-relaxed font-medium">
                                 {item.scientificFact}
@@ -590,13 +608,13 @@ export default function HomePage() {
                       ) : (
                         <div className="py-2 flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-xs text-slate-500 font-semibold">
                           <p>
-                            🔒 Completa a Missão {item.id} no laboratório para desbloquear esta descoberta!
+                            🔒 Jogue a Missão {item.id} para destravar esse segredo!
                           </p>
                           <Link
                             href={`/explorar/${MISSION_STEPS[item.id - 1].slug}`}
                             className="inline-flex items-center gap-1 font-bold text-indigo-600 hover:underline self-start sm:self-auto"
                           >
-                            <span>Abrir Missão {item.id}</span>
+                            <span>Jogar Missão {item.id}</span>
                             <ArrowRight className="w-3.5 h-3.5" />
                           </Link>
                         </div>

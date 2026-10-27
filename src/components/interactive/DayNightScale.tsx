@@ -39,25 +39,25 @@ const SOLAR_ARC_DATA: Record<string, SolarArcConfig> = {
     sunriseHour: 5,
     sunsetHour: 19,
     zenithHeight: 82,
-    summaryText: 'O Sol nasce muito cedo (05h), sobe quase até o topo do céu ao meio-dia e põe-se bem tarde (19h). Total: 14h de sol forte!',
+    summaryText: 'O Sol acorda cedinho (05h) e sobe bem alto no céu! Ele demora para ir embora (19h), dando 14 horas de dia claro para brincar bastante!',
   },
   'equinocio-outono': {
     sunriseHour: 6,
     sunsetHour: 18,
     zenithHeight: 62,
-    summaryText: 'O Sol nasce exatamente às 06h a Leste e põe-se às 18h a Oeste. Dia e noite empatam com 12 horas perfeitas!',
+    summaryText: 'O Sol acorda às 06h e vai dormir às 18h. Temos um empate perfeitinho: 12 horas de dia e 12 horas de noite!',
   },
   'solsticio-inverno': {
     sunriseHour: 7,
     sunsetHour: 17,
     zenithHeight: 40,
-    summaryText: 'O Sol nasce tarde (07h), faz um arco baixo e rasante pelo céu e põe-se cedo (17h). Total: apenas 10h de sol e 14h de noite fria!',
+    summaryText: 'O Sol acorda tarde (07h) com preguiça, anda baixinho no céu e vai dormir cedo (17h). O dia fica curto e a noite bem longa e fria!',
   },
   'equinocio-primavera': {
     sunriseHour: 6,
     sunsetHour: 18,
     zenithHeight: 62,
-    summaryText: 'Novo empate cósmico! O Sol nasce às 06h e põe-se às 18h, iluminando igualmente ambos os hemisférios!',
+    summaryText: 'Novo empate cósmico! O Sol nasce às 06h e se põe às 18h, dividindo o dia e a noite iguaizinhos para todo o planeta!',
   },
 };
 
@@ -70,31 +70,31 @@ interface AstronomerQuiz {
 
 const ASTRONOMER_QUIZ: AstronomerQuiz[] = [
   {
-    question: 'Em que eventos astronómicos o dia e a noite duram exatamente 12 horas cada em qualquer lugar do planeta?',
+    question: 'Em quais dias do ano o dia e a noite duram exatamente 12 horas para todo mundo?',
     options: [
       { text: 'Nos Equinócios de Outono e Primavera! 🤝', isCorrect: true },
       { text: 'Nos Solstícios de Verão e Inverno! ☀️', isCorrect: false },
-      { text: 'Apenas quando há eclipse solar! 🌑', isCorrect: false },
+      { text: 'Apenas quando tem eclipse da Lua! 🌑', isCorrect: false },
     ],
-    explanation: 'Correto! A palavra Equinócio vem do latim "aequus" (igual) e "nox" (noite), significando dias e noites com durações perfeitamente iguais.',
+    explanation: 'Muito bem! A palavra Equinócio é um nome divertido que significa "noites iguais aos dias": 12 horas de Sol e 12 horas de Lua!',
   },
   {
-    question: 'No dia do Solstício de Verão no Hemisfério Sul (21 de Dezembro), o que acontece com as horas?',
+    question: 'No Solstício de Verão no Brasil (21 de Dezembro), o que acontece com as horas?',
     options: [
-      { text: 'É o dia mais longo do ano (cerca de 14h de luz)! 🏖️', isCorrect: true },
-      { text: 'É a noite mais fria e mais longa do ano! ❄️', isCorrect: false },
-      { text: 'O dia e a noite empatam com 12h! ⚖️', isCorrect: false },
+      { text: 'É o dia mais comprido do ano com bastante sol! 🏖️', isCorrect: true },
+      { text: 'É a noite mais fria e escura do ano! ❄️', isCorrect: false },
+      { text: 'O dia e a noite duram só 5 horas! ⚖️', isCorrect: false },
     ],
-    explanation: 'Muito bem! No Solstício de Verão o hemisfério está inclinado ao máximo em direção ao Sol, gerando o dia mais longo de todo o ano.',
+    explanation: 'Certinho! Como o Brasil fica virado diretamente para o Sol em dezembro, temos o dia mais longo do ano inteiro!',
   },
   {
-    question: 'O que é o curioso fenómeno do "Sol da Meia-Noite" nos círculos polares?',
+    question: 'O que é a mágica do "Sol da Meia-Noite" perto dos polos da Terra?',
     options: [
-      { text: 'Durante o Verão polar, o Sol não se põe durante 24 horas! ☀️🌌', isCorrect: true },
-      { text: 'O Sol apaga-se pontualmente à meia-noite! 📴', isCorrect: false },
-      { text: 'A Lua brilha tão forte que parece o Sol! 🌕', isCorrect: false },
+      { text: 'No Verão polar, o Sol nunca se põe durante 24 horas! ☀️🌌', isCorrect: true },
+      { text: 'O Sol se apaga como uma lâmpada à meia-noite! 📴', isCorrect: false },
+      { text: 'A Lua esquenta como uma fogueira no céu! 🌕', isCorrect: false },
     ],
-    explanation: 'Incrível! Perto dos polos a inclinação extrema faz a Terra receber sol 24 horas contínuas durante o solstício de verão daquela região.',
+    explanation: 'Uau, você é demais! Nos polos da Terra, a inclinação faz o Sol dar uma volta inteira no céu sem se esconder, brilhando mesmo de madrugada!',
   },
 ];
 

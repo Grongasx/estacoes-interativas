@@ -270,7 +270,7 @@ export const MissionCardsGrid: React.FC = () => {
             </div>
 
             <h3 className="text-lg sm:text-xl font-black text-slate-900 group-hover:text-purple-700 transition-colors mb-1 leading-snug">
-              6. Glossário Científico
+              Dicionário do Espaço (Glossário)
             </h3>
             <p
               className={`text-slate-600 font-medium mb-3 sm:mb-4 ${

@@ -557,73 +557,74 @@ export const SunAngleSimulator: React.FC<SunAngleSimulatorProps> = ({
   return (
     <div className="space-y-6">
       {/* Barra de Controle do Experimento dos Raios Solares */}
-      <div className="bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 rounded-3xl p-5 sm:p-6 text-white shadow-xl flex flex-wrap items-center justify-between gap-4 border-2 border-amber-300">
+      {/* CABEÇALHO DO SIMULADOR DE LUZ SOLAR */}
+      <div className="bg-gradient-to-r from-amber-500 via-orange-500 to-amber-600 rounded-3xl p-4 sm:p-6 text-white shadow-xl flex flex-wrap items-center justify-between gap-3 border-2 border-amber-300">
         <div>
-          <span className="text-xs font-black uppercase tracking-wider bg-white/20 px-3 py-1 rounded-full inline-block mb-1.5">
-            Laboratório Físico da Luz Solar
+          <span className="text-[11px] font-black uppercase tracking-wider bg-white/20 px-3 py-0.5 rounded-full inline-block mb-1">
+            Laboratório da Lanterna Solar
           </span>
-          <h3 className="text-xl sm:text-2xl font-black">
-            Como o ângulo dos raios solares muda a temperatura?
+          <h3 className="text-lg sm:text-2xl font-black">
+            Como a inclinação da luz muda o calor?
           </h3>
           <p className="text-xs sm:text-sm text-amber-100 mt-0.5">
-            Mude o ângulo do Sol e observe os raios volumétricos e a mancha térmica no chão!
+            Mova o Sol no controle abaixo para ver a luz se concentrar no Verão ou se espalhar no Inverno!
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2">
           <button
             type="button"
             onClick={() => setIsSimulating((prev) => !prev)}
-            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-black text-sm shadow-lg transition-all cursor-pointer ${
+            className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl font-black text-xs sm:text-sm shadow-lg transition-all cursor-pointer min-h-[44px] ${
               isSimulating
                 ? 'bg-rose-600 hover:bg-rose-500 text-white ring-4 ring-rose-300/40 animate-pulse'
-                : 'bg-white hover:bg-amber-50 text-amber-900 ring-4 ring-white/30 hover:scale-105'
+                : 'bg-white hover:bg-amber-50 text-amber-900 ring-4 ring-white/30 hover:scale-105 active:scale-95'
             }`}
           >
             {isSimulating ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
-            <span>{isSimulating ? 'Pausar Simulação' : '▶ Animação Contínua do Ângulo'}</span>
+            <span>{isSimulating ? 'Pausar Animação' : '▶ Animação do Sol'}</span>
           </button>
 
           <AudioButton
-            text="Quando os raios solares chegam retos a noventa graus, toda a energia do Sol fica concentrada em uma área pequena, provocando muito calor e dias de Verão. Quando a luz chega inclinada a trinta graus, a mesma quantidade de energia se espalha em uma área três vezes maior, resultando em menos calor e dias de Inverno!"
-            label="Ouvir explicação científica"
+            text="Quando a luz do Sol bate reta a noventa graus, toda a energia fica concentrada num ponto só, fazendo muito calor de Verão! Quando o Sol bate deitado a trinta graus, a mesma luz se espalha em uma área três vezes maior, aquecendo bem menos e fazendo o frio do Inverno!"
+            label="Ouvir explicação do ângulo"
             size="sm"
           />
         </div>
       </div>
 
-      {/* Botões Rápidos de Comparação dos Extremos (Verão vs Inverno) */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {/* Botões Rápidos de Comparação: Verão vs Inverno */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
         <button
           type="button"
           onClick={() => handlePresetSelect('direct')}
-          className={`p-5 rounded-2xl border-4 text-left transition-all flex items-center gap-4 group cursor-pointer ${
+          className={`p-3.5 sm:p-5 rounded-2xl border-3 sm:border-4 text-left transition-all flex items-center gap-3 sm:gap-4 group cursor-pointer active:scale-98 ${
             angle >= 70
-              ? 'bg-gradient-to-br from-amber-50 via-orange-50 to-amber-100 border-amber-500 shadow-xl scale-[1.02] ring-4 ring-amber-300/40'
-              : 'bg-white border-slate-200 hover:bg-amber-50/50 hover:scale-[1.01]'
+              ? 'bg-gradient-to-br from-amber-50 via-orange-50 to-amber-100 border-amber-500 shadow-xl scale-[1.01] ring-3 ring-amber-300/40'
+              : 'bg-white border-slate-200 hover:bg-amber-50/50'
           }`}
         >
           <div
-            className={`p-3.5 rounded-2xl ${
+            className={`p-2.5 sm:p-3.5 rounded-2xl ${
               angle >= 70 ? 'bg-amber-500 text-white shadow-lg' : 'bg-slate-100 text-slate-600'
-            } group-hover:scale-110 transition-transform`}
+            } group-hover:scale-110 transition-transform shrink-0`}
           >
-            <ThermometerSun className="w-9 h-9" />
+            <ThermometerSun className="w-7 h-7 sm:w-9 sm:h-9" />
           </div>
           <div className="flex-1">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-black uppercase tracking-wider text-amber-700">
-                1. Luz Direta (90° · Perpendicular)
+              <span className="text-[10px] sm:text-xs font-black uppercase tracking-wider text-amber-700">
+                1. Luz Reta (90°)
               </span>
-              <span className="text-xs font-black bg-amber-200 text-amber-900 px-2 py-0.5 rounded-full">
+              <span className="text-[10px] sm:text-xs font-black bg-amber-200 text-amber-900 px-2 py-0.5 rounded-full">
                 🔥 38°C
               </span>
             </div>
-            <h4 className="text-lg font-black text-slate-900 mt-0.5">
-              Raios Concentrados = VERÃO ☀️
+            <h4 className="text-base sm:text-lg font-black text-slate-900 mt-0.5">
+              Luz Concentrada = VERÃO ☀️
             </h4>
-            <p className="text-xs text-slate-600 mt-1">
-              Sol alto no céu, área iluminada pequena e máxima intensidade térmica!
+            <p className="text-xs text-slate-600 mt-0.5">
+              Sol alto, luz concentrada em área pequena e muito calor!
             </p>
           </div>
         </button>
@@ -631,53 +632,53 @@ export const SunAngleSimulator: React.FC<SunAngleSimulatorProps> = ({
         <button
           type="button"
           onClick={() => handlePresetSelect('slanted')}
-          className={`p-5 rounded-2xl border-4 text-left transition-all flex items-center gap-4 group cursor-pointer ${
+          className={`p-3.5 sm:p-5 rounded-2xl border-3 sm:border-4 text-left transition-all flex items-center gap-3 sm:gap-4 group cursor-pointer active:scale-98 ${
             angle < 70
-              ? 'bg-gradient-to-br from-sky-50 via-indigo-50 to-blue-100 border-sky-500 shadow-xl scale-[1.02] ring-4 ring-sky-300/40'
-              : 'bg-white border-slate-200 hover:bg-sky-50/50 hover:scale-[1.01]'
+              ? 'bg-gradient-to-br from-sky-50 via-indigo-50 to-blue-100 border-sky-500 shadow-xl scale-[1.01] ring-3 ring-sky-300/40'
+              : 'bg-white border-slate-200 hover:bg-sky-50/50'
           }`}
         >
           <div
-            className={`p-3.5 rounded-2xl ${
+            className={`p-2.5 sm:p-3.5 rounded-2xl ${
               angle < 70 ? 'bg-sky-500 text-white shadow-lg' : 'bg-slate-100 text-slate-600'
-            } group-hover:scale-110 transition-transform`}
+            } group-hover:scale-110 transition-transform shrink-0`}
           >
-            <ThermometerSnowflake className="w-9 h-9" />
+            <ThermometerSnowflake className="w-7 h-7 sm:w-9 sm:h-9" />
           </div>
           <div className="flex-1">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-black uppercase tracking-wider text-sky-700">
-                2. Luz Inclinada (35° · Oblíqua)
+              <span className="text-[10px] sm:text-xs font-black uppercase tracking-wider text-sky-700">
+                2. Luz Deitada (35°)
               </span>
-              <span className="text-xs font-black bg-sky-200 text-sky-900 px-2 py-0.5 rounded-full">
+              <span className="text-[10px] sm:text-xs font-black bg-sky-200 text-sky-900 px-2 py-0.5 rounded-full">
                 ❄️ 10°C
               </span>
             </div>
-            <h4 className="text-lg font-black text-slate-900 mt-0.5">
-              Raios Espalhados = INVERNO ❄️
+            <h4 className="text-base sm:text-lg font-black text-slate-900 mt-0.5">
+              Luz Espalhada = INVERNO ❄️
             </h4>
-            <p className="text-xs text-slate-600 mt-1">
-              Sol baixo no horizonte, a luz se espalha em área 3x maior e o solo fica frio!
+            <p className="text-xs text-slate-600 mt-0.5">
+              Sol baixinho, a luz se estica em área 3x maior e o solo fica frio!
             </p>
           </div>
         </button>
       </div>
 
-      {/* QUADRO PRINCIPAL DO EXPERIMENTO: CANVAS 60 FPS COM FEIXES VOLUMÉTRICOS */}
+      {/* QUADRO PRINCIPAL: CANVAS 60 FPS COM FEIXES VOLUMÉTRICOS */}
       <div
         ref={containerRef}
-        className="relative rounded-3xl overflow-hidden border-4 border-slate-300/80 shadow-2xl min-h-[460px] sm:min-h-[520px] flex flex-col justify-between select-none"
+        className="relative rounded-3xl overflow-hidden border-3 sm:border-4 border-slate-300/80 shadow-2xl min-h-[380px] sm:min-h-[520px] flex flex-col justify-between select-none"
       >
-        {/* Barra de Telemetria no Topo do Cenário */}
-        <div className="relative z-20 flex flex-wrap items-center justify-between gap-3 p-4 bg-white/85 backdrop-blur-md border-b border-black/10">
-          <div className="flex items-center gap-3">
-            <span className="text-3xl">{angle >= 70 ? '☀️' : '❄️'}</span>
+        {/* Barra de Telemetria no Topo */}
+        <div className="relative z-20 flex flex-wrap items-center justify-between gap-2 p-3 sm:p-4 bg-white/90 backdrop-blur-md border-b border-black/10">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <span className="text-2xl sm:text-3xl">{angle >= 70 ? '☀️' : '❄️'}</span>
             <div>
-              <span className="text-[10px] font-black uppercase tracking-wider text-slate-500 block">
-                Ângulo Atual de Incidência Solar
+              <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-wider text-slate-500 block">
+                Inclinação do Sol
               </span>
-              <span className="text-lg sm:text-xl font-black text-slate-900">
-                {Math.round(angle)}° · {angle >= 70 ? 'Incidência Direta (Zenital)' : 'Incidência Inclinada (Oblíqua)'}
+              <span className="text-sm sm:text-xl font-black text-slate-900">
+                {Math.round(angle)}° · {angle >= 70 ? 'Sol Reto (Verão)' : 'Sol Inclinado (Inverno)'}
               </span>
             </div>
           </div>

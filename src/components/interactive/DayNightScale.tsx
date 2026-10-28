@@ -61,7 +61,7 @@ const SOLAR_ARC_DATA: Record<string, SolarArcConfig> = {
   },
 };
 
-// Mini-desafio do Astrónomo
+// Mini-desafio do Astrônomo
 interface AstronomerQuiz {
   question: string;
   options: { text: string; isCorrect: boolean }[];
@@ -76,7 +76,7 @@ const ASTRONOMER_QUIZ: AstronomerQuiz[] = [
       { text: 'Nos Solstícios de Verão e Inverno! ☀️', isCorrect: false },
       { text: 'Apenas quando tem eclipse da Lua! 🌑', isCorrect: false },
     ],
-    explanation: 'Muito bem! A palavra Equinócio é um nome divertido que significa "noites iguais aos dias": 12 horas de Sol e 12 horas de Lua!',
+    explanation: 'Muito bem! A palavra Equinócio é um nome divertido que significa "noites iguais aos dias": 12 horas de Dia e 12 horas de Noite!',
   },
   {
     question: 'No Solstício de Verão no Brasil (21 de Dezembro), o que acontece com as horas?',
@@ -928,7 +928,7 @@ export const DayNightScale: React.FC = () => {
         </div>
       </div>
 
-      {/* SEÇÃO 5: O DESAFIO DO ASTRÓNOMO CHEFE (MINI-QUIZ RECOMPENSADOR) */}
+      {/* SEÇÃO 5: O DESAFIO DO ASTRÔNOMO CHEFE (MINI-QUIZ RECOMPENSADOR) */}
       <div className="bg-gradient-to-br from-indigo-900 to-purple-950 rounded-3xl p-6 sm:p-8 border-4 border-amber-300 shadow-xl space-y-6 text-white">
         <div className="flex items-center justify-between gap-4">
           <div className="flex items-center gap-3">
@@ -940,7 +940,7 @@ export const DayNightScale: React.FC = () => {
                 Desafio dos Astros
               </span>
               <h3 className="text-2xl font-black">
-                O Teste Final do Astrónomo Chefe
+                O Teste Final do Astrônomo Chefe
               </h3>
             </div>
           </div>
@@ -1025,10 +1025,10 @@ export const DayNightScale: React.FC = () => {
             >
               <div className="text-4xl">👑 ☀️ 🌙 ⚖️</div>
               <h5 className="text-xl font-black">
-                Medalha de Astrónomo Chefe Conquistada!
+                Medalha de Astrônomo Chefe Conquistada!
               </h5>
               <p className="text-xs sm:text-sm font-bold text-amber-950/90">
-                Dominaste por completo os Solstícios, Equinócios e o grande relógio de 24 horas da Terra!
+                Você dominou por completo os Solstícios, Equinócios e o grande relógio de 24 horas da Terra!
               </p>
             </motion.div>
           )}

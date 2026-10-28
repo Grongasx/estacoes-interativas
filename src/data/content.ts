@@ -131,15 +131,15 @@ export const MISSION_STEPS: MissionStep[] = [
     id: 5,
     slug: 'solsticios-e-equinocios',
     title: '5. Solstícios e Equinócios',
-    subtitle: 'O cabo de guerra do Sol e da Lua!',
+    subtitle: 'O cabo de guerra entre o Dia e a Noite!',
     badgeEmoji: '⚖️',
-    badgeName: 'Astrónomo Chefe',
+    badgeName: 'Astrônomo Chefe',
     introText:
-      'O primeiro dia de cada estação tem um nome bem legal! Tudo depende de quem ganha o cabo de guerra das 24 horas: o Sol (dia claro para brincar) ou a Lua (noite escura para dormir).',
+      'O primeiro dia de cada estação tem um nome bem legal! Tudo depende de quem ganha o cabo de guerra das 24 horas: o Dia (luz do Sol para brincar) ou a Noite (escuridão estrelada para descansar).',
     audioIntro:
-      'Missão 5: Solstícios e Equinócios! Quem ganha mais horas no relógio? Nos Equinócios dá empate perfeito: 12 horas de dia e 12 horas de noite! Nos Solstícios, um deles ganha de goleada!',
+      'Missão 5: Solstícios e Equinócios! Quem ganha mais horas no relógio? Nos Equinócios dá empate perfeito: 12 horas de Dia e 12 horas de Noite! Nos Solstícios, um deles ganha com muitas horas a mais!',
     keyTakeaway:
-      'Equinócio é o grande empate: 12 horas de Sol e 12 horas de Lua. Solstício é o dia mais comprido do ano (Verão) ou a noite mais longa do ano (Inverno).',
+      'Equinócio é o grande empate: 12 horas de Dia e 12 horas de Noite. Solstício é o dia mais longo do ano (Verão) ou a noite mais longa do ano (Inverno).',
     glossaryTermsUsed: ['rotacao', 'hemisferio'],
   },
   {

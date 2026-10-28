@@ -2,7 +2,7 @@
 'use client';
 
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { Play, Pause, RotateCcw, Sparkles } from 'lucide-react';
+import { Play, Pause, Wind, Sparkles, MousePointerClick } from 'lucide-react';
 
 export type SeasonType = 'summer' | 'autumn' | 'winter' | 'spring';
 
@@ -25,32 +25,40 @@ interface CanvasParticle {
   vFlip: number;
   wobble: number;
   vWobble: number;
-  type: 'leaf' | 'snow' | 'petal' | 'burstLeaf';
+  type: 'leaf' | 'snow' | 'petal' | 'burstLeaf' | 'pollen';
   colorStart: string;
   colorEnd: string;
   opacity: number;
   depth: number;
 }
 
-// 82 Folhas botânicas individuais na copa com posições e atrasos orgânicos determinísticos (Zero Hydration Mismatch)
+// Folhas botânicas individuais na copa com posições e atrasos orgânicos determinísticos (Zero Hydration Mismatch)
 interface DetailedTreeLeaf {
   id: number;
   x: number;
   y: number;
   angle: number;
   scale: number;
-  growthDelay: number; // Atraso no nascimento da primavera para crescerem aos poucos
+  growthDelay: number;
   springColor: string;
   summerColor: string;
   autumnColor: string;
 }
 
-// Paletas de cores para as folhas
+// Paletas de cores ricas para as folhas
 const SPRING_GREENS = ['#86efac', '#4ade80', '#a7f3d0', '#6ee7b7', '#bbf7d0'];
 const SUMMER_GREENS = ['#15803d', '#16a34a', '#166534', '#14532d', '#22c55e'];
 const AUTUMN_COLORS = ['#dc2626', '#ea580c', '#f97316', '#facc15', '#c2410c', '#b45309', '#d97706'];
 
-// Geração determinística de 84 folhas botânicas detalhadas cobrindo a copa nos galhos
+const AUTUMN_FALLING_PAIRS = [
+  { start: '#dc2626', end: '#f97316' },
+  { start: '#ea580c', end: '#facc15' },
+  { start: '#b45309', end: '#fb923c' },
+  { start: '#991b1b', end: '#f59e0b' },
+  { start: '#c2410c', end: '#fde047' },
+];
+
+// Geração determinística de 74 folhas botânicas detalhadas cobrindo a copa nos galhos
 const TREE_LEAVES_DATA: DetailedTreeLeaf[] = [
   // Topo da Copa
   { id: 1, x: 450, y: 90, angle: -90, scale: 1.05, growthDelay: 0.1, springColor: SPRING_GREENS[0], summerColor: SUMMER_GREENS[0], autumnColor: AUTUMN_COLORS[0] },
@@ -145,22 +153,50 @@ const TREE_LEAVES_DATA: DetailedTreeLeaf[] = [
 
 // Flores primaveris de cerejeira (sakura) com pétalas desabrochando
 const SPRING_BLOSSOMS = [
-  { x: 440, y: 110, s: 1.1 },
-  { x: 480, y: 125, s: 1.0 },
-  { x: 370, y: 160, s: 1.2 },
-  { x: 530, y: 155, s: 1.15 },
-  { x: 310, y: 180, s: 1.0 },
-  { x: 590, y: 175, s: 1.2 },
-  { x: 250, y: 230, s: 1.1 },
-  { x: 650, y: 225, s: 1.1 },
-  { x: 200, y: 280, s: 1.0 },
-  { x: 700, y: 275, s: 1.0 },
-  { x: 410, y: 210, s: 1.25 },
-  { x: 490, y: 205, s: 1.15 },
-  { x: 360, y: 250, s: 1.0 },
-  { x: 540, y: 245, s: 1.05 },
-  { x: 450, y: 150, s: 1.3 },
-  { x: 450, y: 260, s: 1.1 },
+  { x: 440, y: 110, s: 1.1, delay: 0.2 },
+  { x: 480, y: 125, s: 1.0, delay: 0.4 },
+  { x: 370, y: 160, s: 1.2, delay: 0.3 },
+  { x: 530, y: 155, s: 1.15, delay: 0.5 },
+  { x: 310, y: 180, s: 1.0, delay: 0.7 },
+  { x: 590, y: 175, s: 1.2, delay: 0.6 },
+  { x: 250, y: 230, s: 1.1, delay: 0.9 },
+  { x: 650, y: 225, s: 1.1, delay: 0.8 },
+  { x: 200, y: 280, s: 1.0, delay: 1.1 },
+  { x: 700, y: 275, s: 1.0, delay: 1.0 },
+  { x: 410, y: 210, s: 1.25, delay: 0.3 },
+  { x: 490, y: 205, s: 1.15, delay: 0.4 },
+  { x: 360, y: 250, s: 1.0, delay: 0.6 },
+  { x: 540, y: 245, s: 1.05, delay: 0.7 },
+  { x: 450, y: 150, s: 1.3, delay: 0.1 },
+  { x: 450, y: 260, s: 1.1, delay: 0.5 },
+];
+
+// Estrelas fixas determinísticas para a noite de Inverno
+const WINTER_STARS = [
+  { cx: 90, cy: 70, r: 1.8, opacity: 0.9 },
+  { cx: 165, cy: 110, r: 1.2, opacity: 0.6 },
+  { cx: 240, cy: 60, r: 2.2, opacity: 0.95 },
+  { cx: 330, cy: 85, r: 1.5, opacity: 0.7 },
+  { cx: 580, cy: 65, r: 2.0, opacity: 0.85 },
+  { cx: 670, cy: 95, r: 1.4, opacity: 0.65 },
+  { cx: 740, cy: 55, r: 2.3, opacity: 0.9 },
+  { cx: 830, cy: 120, r: 1.6, opacity: 0.75 },
+  { cx: 120, cy: 170, r: 1.3, opacity: 0.5 },
+  { cx: 790, cy: 180, r: 1.5, opacity: 0.6 },
+];
+
+// Pingentes de gelo (icicles) nos galhos durante o Inverno
+const WINTER_ICICLES = [
+  { x: 260, y: 182, len: 18 },
+  { x: 295, y: 202, len: 24 },
+  { x: 345, y: 282, len: 20 },
+  { x: 280, y: 308, len: 16 },
+  { x: 555, y: 205, len: 22 },
+  { x: 610, y: 178, len: 19 },
+  { x: 575, y: 310, len: 25 },
+  { x: 620, y: 320, len: 17 },
+  { x: 430, y: 255, len: 21 },
+  { x: 470, y: 255, len: 18 },
 ];
 
 export const SeasonTreeInteractive: React.FC<SeasonTreeProps> = ({
@@ -174,28 +210,26 @@ export const SeasonTreeInteractive: React.FC<SeasonTreeProps> = ({
   const particlesRef = useRef<CanvasParticle[]>([]);
   const prevSeasonRef = useRef<SeasonType>(selectedSeason);
 
-  // Modo de Simulação Contínua do Ciclo da Vida
+  // Estados de Interação e Simulação
   const [isSimulating, setIsSimulating] = useState(false);
-  const simIntervalRef = useRef<NodeJS.Timeout | null>(null);
-
-  // Paletas de cores para folhas de outono caindo
-  const autumnFallingColors = [
-    { start: '#dc2626', end: '#f97316' },
-    { start: '#ea580c', end: '#facc15' },
-    { start: '#b45309', end: '#fb923c' },
-    { start: '#991b1b', end: '#f59e0b' },
-    { start: '#c2410c', end: '#fde047' },
-  ];
-
-  // Alterna modo de simulação gravada contínua (Primavera -> Verão -> Outono -> Inverno -> Primavera...)
-  const toggleSimulation = () => {
-    setIsSimulating((prev) => !prev);
-  };
+  const [windBoost, setWindBoost] = useState(0);
+  const [treeSway, setTreeSway] = useState(false);
+  const windBoostRef = useRef(0);
+  const simIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const selectedSeasonRef = useRef(selectedSeason);
   useEffect(() => {
     selectedSeasonRef.current = selectedSeason;
   }, [selectedSeason]);
+
+  useEffect(() => {
+    windBoostRef.current = windBoost;
+  }, [windBoost]);
+
+  // Alterna modo de simulação gravada contínua (Primavera -> Verão -> Outono -> Inverno -> Primavera...)
+  const toggleSimulation = () => {
+    setIsSimulating((prev) => !prev);
+  };
 
   useEffect(() => {
     if (!isSimulating) {
@@ -208,7 +242,7 @@ export const SeasonTreeInteractive: React.FC<SeasonTreeProps> = ({
       const currentIndex = seasonsOrder.indexOf(selectedSeasonRef.current);
       const nextIndex = (currentIndex + 1) % seasonsOrder.length;
       onSelectSeason(seasonsOrder[nextIndex]);
-    }, 4500); // 4.5 segundos em cada fase do ciclo
+    }, 4500);
 
     return () => {
       if (simIntervalRef.current) clearInterval(simIntervalRef.current);
@@ -232,21 +266,21 @@ export const SeasonTreeInteractive: React.FC<SeasonTreeProps> = ({
       ctx.translate(x, y);
       ctx.rotate(angle);
       const scaleX = Math.cos(flip);
-      ctx.scale(Math.abs(scaleX) < 0.1 ? 0.1 : scaleX, 1);
+      ctx.scale(Math.abs(scaleX) < 0.12 ? 0.12 : scaleX, 1);
       ctx.globalAlpha = Math.max(0, Math.min(1, opacity));
 
-      ctx.shadowColor = 'rgba(0, 0, 0, 0.18)';
+      ctx.shadowColor = 'rgba(0, 0, 0, 0.2)';
       ctx.shadowBlur = 4;
       ctx.shadowOffsetY = 2;
 
       const grad = ctx.createRadialGradient(0, size * 0.4, 1, 0, -size * 0.3, size * 1.2);
       grad.addColorStop(0, colorStart);
-      grad.addColorStop(0.55, colorEnd);
+      grad.addColorStop(0.6, colorEnd);
       grad.addColorStop(1, '#fef08a');
 
       ctx.fillStyle = grad;
       ctx.beginPath();
-      // Formato lanceado com pontas lobadas
+      // Formato lanceado com pontas lobadas (Bordo/Carvalho)
       ctx.moveTo(0, size * 0.55);
       ctx.bezierCurveTo(-size * 0.35, size * 0.35, -size * 0.45, size * 0.15, -size * 0.4, 0);
       ctx.bezierCurveTo(-size * 0.6, -size * 0.1, -size * 0.65, -size * 0.35, -size * 0.35, -size * 0.45);
@@ -303,7 +337,7 @@ export const SeasonTreeInteractive: React.FC<SeasonTreeProps> = ({
       ctx.translate(x, y);
       ctx.rotate(angle);
       const scaleX = Math.cos(flip);
-      ctx.scale(Math.abs(scaleX) < 0.1 ? 0.1 : scaleX, 1);
+      ctx.scale(Math.abs(scaleX) < 0.12 ? 0.12 : scaleX, 1);
       ctx.globalAlpha = Math.max(0, Math.min(1, opacity));
 
       const grad = ctx.createRadialGradient(0, size * 0.2, 0, 0, -size * 0.2, size * 0.9);
@@ -330,29 +364,29 @@ export const SeasonTreeInteractive: React.FC<SeasonTreeProps> = ({
   // Raios Solares Volumétricos de Verão (God Rays) com Degradê Suave
   const drawVolumetricSunRays = useCallback(
     (ctx: CanvasRenderingContext2D, width: number, height: number, time: number) => {
-      const sunX = width * 0.15;
-      const sunY = height * 0.15;
+      const sunX = width * 0.14;
+      const sunY = height * 0.16;
 
       ctx.save();
 
       // Corona Solar Difusa
       const sunGlow = ctx.createRadialGradient(sunX, sunY, 0, sunX, sunY, width * 0.65);
-      sunGlow.addColorStop(0, 'rgba(255, 255, 230, 0.88)');
+      sunGlow.addColorStop(0, 'rgba(255, 255, 230, 0.9)');
       sunGlow.addColorStop(0.12, 'rgba(254, 240, 138, 0.55)');
-      sunGlow.addColorStop(0.35, 'rgba(251, 191, 36, 0.25)');
-      sunGlow.addColorStop(0.65, 'rgba(249, 115, 22, 0.08)');
+      sunGlow.addColorStop(0.35, 'rgba(251, 191, 36, 0.22)');
+      sunGlow.addColorStop(0.65, 'rgba(249, 115, 22, 0.06)');
       sunGlow.addColorStop(1, 'rgba(249, 115, 22, 0)');
       ctx.fillStyle = sunGlow;
       ctx.fillRect(0, 0, width, height);
 
       // Feixes de Luz Volumétricos (God Rays)
-      const baseAngles = [0.42, 0.58, 0.74, 0.90, 1.06, 1.22, 1.38];
+      const baseAngles = [0.35, 0.52, 0.68, 0.85, 1.02, 1.18, 1.35];
       const beamLength = width * 1.4;
 
       baseAngles.forEach((baseAngle, i) => {
         const wave = Math.sin(time * 0.0012 + i * 1.3) * 0.04;
         const currentAngle = baseAngle + wave;
-        const spread = 0.08 + Math.sin(time * 0.0008 + i * 2) * 0.02;
+        const spread = 0.07 + Math.sin(time * 0.0008 + i * 2) * 0.02;
 
         const x1 = sunX + Math.cos(currentAngle - spread) * beamLength;
         const y1 = sunY + Math.sin(currentAngle - spread) * beamLength;
@@ -363,7 +397,7 @@ export const SeasonTreeInteractive: React.FC<SeasonTreeProps> = ({
         const targetCenterY = sunY + Math.sin(currentAngle) * beamLength;
         const rayGrad = ctx.createLinearGradient(sunX, sunY, targetCenterX, targetCenterY);
 
-        const pulseOpacity = 0.24 + Math.sin(time * 0.0015 + i * 0.8) * 0.08;
+        const pulseOpacity = 0.22 + Math.sin(time * 0.0015 + i * 0.8) * 0.08;
         rayGrad.addColorStop(0, `rgba(255, 255, 235, ${pulseOpacity})`);
         rayGrad.addColorStop(0.25, `rgba(254, 240, 138, ${pulseOpacity * 0.75})`);
         rayGrad.addColorStop(0.65, `rgba(251, 191, 36, ${pulseOpacity * 0.3})`);
@@ -378,16 +412,16 @@ export const SeasonTreeInteractive: React.FC<SeasonTreeProps> = ({
         ctx.fill();
       });
 
-      // Motes de Poeira Solar Dourada
-      for (let j = 0; j < 26; j++) {
+      // Partículas de Pólen e Luz Solar Dourada Flutuando no Verão
+      for (let j = 0; j < 28; j++) {
         const moteTime = time * 0.0006 + j * 123.45;
-        const mx = (Math.sin(moteTime * 1.3) * 0.5 + 0.5) * (width * 0.75) + width * 0.12;
+        const mx = (Math.sin(moteTime * 1.3) * 0.5 + 0.5) * (width * 0.78) + width * 0.1;
         const my = (Math.cos(moteTime * 0.9) * 0.5 + 0.5) * (height * 0.7) + height * 0.1;
-        const mSize = 1.2 + Math.sin(moteTime * 3) * 0.8;
-        const mAlpha = 0.3 + Math.sin(moteTime * 4) * 0.3;
+        const mSize = 1.5 + Math.sin(moteTime * 3) * 0.9;
+        const mAlpha = 0.35 + Math.sin(moteTime * 4) * 0.3;
 
         ctx.save();
-        ctx.fillStyle = `rgba(255, 255, 220, ${mAlpha})`;
+        ctx.fillStyle = `rgba(255, 255, 210, ${mAlpha})`;
         ctx.shadowColor = '#fde047';
         ctx.shadowBlur = 8;
         ctx.beginPath();
@@ -401,23 +435,23 @@ export const SeasonTreeInteractive: React.FC<SeasonTreeProps> = ({
     []
   );
 
-  // Queda súbita de folhas quando o Inverno é acionado (morte e desprendimento)
+  // Queda súbita de folhas quando o Inverno é acionado (morte e desprendimento sazonal)
   const triggerWinterLeafBurst = useCallback((width: number, height: number) => {
     const burstParticles: CanvasParticle[] = [];
     const canopyCenterX = width * 0.5;
-    const canopyCenterY = height * 0.35;
+    const canopyCenterY = height * 0.38;
 
     for (let i = 0; i < 60; i++) {
       const offsetX = (Math.random() - 0.5) * (width * 0.55);
       const offsetY = (Math.random() - 0.5) * (height * 0.35);
-      const colorPair = autumnFallingColors[Math.floor(Math.random() * autumnFallingColors.length)];
+      const colorPair = AUTUMN_FALLING_PAIRS[Math.floor(Math.random() * AUTUMN_FALLING_PAIRS.length)];
 
       burstParticles.push({
         x: canopyCenterX + offsetX,
         y: canopyCenterY + offsetY,
-        vx: (Math.random() - 0.3) * 3 + 1,
+        vx: (Math.random() - 0.3) * 3.2 + 1.2,
         vy: 2.8 + Math.random() * 4.5,
-        size: 16 + Math.random() * 12,
+        size: 14 + Math.random() * 11,
         angle: Math.random() * Math.PI * 2,
         vAngle: (Math.random() - 0.5) * 0.14,
         flip: Math.random() * Math.PI,
@@ -433,104 +467,206 @@ export const SeasonTreeInteractive: React.FC<SeasonTreeProps> = ({
     }
 
     particlesRef.current = [...particlesRef.current, ...burstParticles];
-  }, [autumnFallingColors]);
+  }, []);
 
-  // Sincroniza partículas contínuas conforme a estação ativa
-  const syncParticles = useCallback(
-    (season: SeasonType, width: number, height: number) => {
-      const existing = particlesRef.current.filter((p) => p.type === 'burstLeaf');
-      const nextParticles: CanvasParticle[] = [...existing];
+  // Dispara rajada interativa quando a criança clica na árvore ou no botão de vento
+  const triggerInteractiveGust = useCallback(
+    (clickX?: number, clickY?: number) => {
+      const container = containerRef.current;
+      if (!container) return;
+      const rect = container.getBoundingClientRect();
+      const originX = clickX ?? rect.width * 0.5;
+      const originY = clickY ?? rect.height * 0.38;
 
-      if (season === 'autumn') {
-        // Folhas caindo aos poucos continuamente
-        const numLeaves = 24;
-        for (let i = 0; i < numLeaves; i++) {
-          const colorPair = autumnFallingColors[i % autumnFallingColors.length];
-          nextParticles.push({
-            x: Math.random() * width,
-            y: Math.random() * height - height * 0.3,
-            vx: 0.8 + Math.random() * 1.8,
-            vy: 1.2 + Math.random() * 2.0,
-            size: 14 + Math.random() * 12,
+      setTreeSway(true);
+      setWindBoost(4.2);
+      setTimeout(() => setTreeSway(false), 700);
+      setTimeout(() => setWindBoost(0), 1800);
+
+      const extra: CanvasParticle[] = [];
+      const count = 18;
+
+      for (let i = 0; i < count; i++) {
+        const spreadX = (Math.random() - 0.5) * 120;
+        const spreadY = (Math.random() - 0.5) * 80;
+
+        if (selectedSeason === 'autumn') {
+          const pair = AUTUMN_FALLING_PAIRS[i % AUTUMN_FALLING_PAIRS.length];
+          extra.push({
+            x: originX + spreadX,
+            y: originY + spreadY,
+            vx: 2.5 + Math.random() * 3.5,
+            vy: 1.8 + Math.random() * 2.8,
+            size: 14 + Math.random() * 10,
             angle: Math.random() * Math.PI * 2,
-            vAngle: (Math.random() - 0.5) * 0.07,
+            vAngle: (Math.random() - 0.5) * 0.15,
             flip: Math.random() * Math.PI,
-            vFlip: 0.03 + Math.random() * 0.05,
+            vFlip: 0.06 + Math.random() * 0.08,
             wobble: Math.random() * Math.PI * 2,
-            vWobble: 0.03 + Math.random() * 0.04,
-            type: 'leaf',
-            colorStart: colorPair.start,
-            colorEnd: colorPair.end,
-            opacity: 0.85 + Math.random() * 0.15,
-            depth: i % 3,
+            vWobble: 0.05,
+            type: 'burstLeaf',
+            colorStart: pair.start,
+            colorEnd: pair.end,
+            opacity: 1,
+            depth: 2,
           });
-        }
-      } else if (season === 'winter') {
-        // Neve contínua em 3 camadas de profundidade
-        const numSnowflakes = 95;
-        for (let i = 0; i < numSnowflakes; i++) {
-          const depth = i % 3;
-          const size = depth === 0 ? 1.6 : depth === 1 ? 2.8 : 4.0;
-          const speed = depth === 0 ? 0.9 : depth === 1 ? 1.7 : 2.7;
-
-          nextParticles.push({
-            x: Math.random() * width,
-            y: Math.random() * height,
-            vx: 0.5 + Math.random() * 0.9,
-            vy: speed + Math.random() * 0.8,
-            size,
+        } else if (selectedSeason === 'spring') {
+          extra.push({
+            x: originX + spreadX,
+            y: originY + spreadY,
+            vx: 2.2 + Math.random() * 3.0,
+            vy: 1.2 + Math.random() * 2.2,
+            size: 10 + Math.random() * 6,
+            angle: Math.random() * Math.PI * 2,
+            vAngle: (Math.random() - 0.5) * 0.12,
+            flip: Math.random() * Math.PI,
+            vFlip: 0.06 + Math.random() * 0.07,
+            wobble: Math.random() * Math.PI * 2,
+            vWobble: 0.05,
+            type: 'petal',
+            colorStart: '#f43f5e',
+            colorEnd: '#fbcfe8',
+            opacity: 1,
+            depth: 2,
+          });
+        } else if (selectedSeason === 'summer') {
+          extra.push({
+            x: originX + spreadX,
+            y: originY + spreadY,
+            vx: 1.8 + Math.random() * 2.5,
+            vy: 1.5 + Math.random() * 2.2,
+            size: 13 + Math.random() * 8,
+            angle: Math.random() * Math.PI * 2,
+            vAngle: (Math.random() - 0.5) * 0.1,
+            flip: Math.random() * Math.PI,
+            vFlip: 0.05,
+            wobble: Math.random() * Math.PI * 2,
+            vWobble: 0.04,
+            type: 'burstLeaf',
+            colorStart: '#15803d',
+            colorEnd: '#4ade80',
+            opacity: 1,
+            depth: 2,
+          });
+        } else if (selectedSeason === 'winter') {
+          extra.push({
+            x: originX + spreadX,
+            y: originY + spreadY,
+            vx: 2.0 + Math.random() * 3.0,
+            vy: 2.0 + Math.random() * 3.0,
+            size: 3.5 + Math.random() * 2.5,
             angle: 0,
             vAngle: 0,
             flip: 0,
             vFlip: 0,
             wobble: Math.random() * Math.PI * 2,
-            vWobble: 0.02 + Math.random() * 0.03,
+            vWobble: 0.04,
             type: 'snow',
             colorStart: '#ffffff',
-            colorEnd: '#ffffff',
-            opacity: depth === 0 ? 0.45 : depth === 1 ? 0.75 : 0.95,
-            depth,
-          });
-        }
-      } else if (season === 'spring') {
-        // Pétalas de flores dançando na brisa
-        const numPetals = 28;
-        for (let i = 0; i < numPetals; i++) {
-          nextParticles.push({
-            x: Math.random() * width,
-            y: Math.random() * height - height * 0.2,
-            vx: 1.2 + Math.random() * 1.6,
-            vy: 0.9 + Math.random() * 1.5,
-            size: 9 + Math.random() * 7,
-            angle: Math.random() * Math.PI * 2,
-            vAngle: (Math.random() - 0.5) * 0.08,
-            flip: Math.random() * Math.PI,
-            vFlip: 0.04 + Math.random() * 0.06,
-            wobble: Math.random() * Math.PI * 2,
-            vWobble: 0.04 + Math.random() * 0.05,
-            type: 'petal',
-            colorStart: '#f43f5e',
-            colorEnd: '#fbcfe8',
-            opacity: 0.85 + Math.random() * 0.15,
-            depth: i % 3,
+            colorEnd: '#e0f2fe',
+            opacity: 0.95,
+            depth: 2,
           });
         }
       }
 
-      particlesRef.current = nextParticles;
+      particlesRef.current = [...particlesRef.current, ...extra];
     },
-    [autumnFallingColors]
+    [selectedSeason]
   );
 
+  // Sincroniza partículas contínuas conforme a estação ativa
+  const syncParticles = useCallback((season: SeasonType, width: number, height: number) => {
+    const existing = particlesRef.current.filter((p) => p.type === 'burstLeaf');
+    const nextParticles: CanvasParticle[] = [...existing];
+
+    if (season === 'autumn') {
+      const numLeaves = 26;
+      for (let i = 0; i < numLeaves; i++) {
+        const colorPair = AUTUMN_FALLING_PAIRS[i % AUTUMN_FALLING_PAIRS.length];
+        nextParticles.push({
+          x: Math.random() * width,
+          y: Math.random() * height - height * 0.2,
+          vx: 0.8 + Math.random() * 1.8,
+          vy: 1.2 + Math.random() * 2.0,
+          size: 14 + Math.random() * 11,
+          angle: Math.random() * Math.PI * 2,
+          vAngle: (Math.random() - 0.5) * 0.07,
+          flip: Math.random() * Math.PI,
+          vFlip: 0.03 + Math.random() * 0.05,
+          wobble: Math.random() * Math.PI * 2,
+          vWobble: 0.03 + Math.random() * 0.04,
+          type: 'leaf',
+          colorStart: colorPair.start,
+          colorEnd: colorPair.end,
+          opacity: 0.85 + Math.random() * 0.15,
+          depth: i % 3,
+        });
+      }
+    } else if (season === 'winter') {
+      const numSnowflakes = 95;
+      for (let i = 0; i < numSnowflakes; i++) {
+        const depth = i % 3;
+        const size = depth === 0 ? 1.8 : depth === 1 ? 3.0 : 4.2;
+        const speed = depth === 0 ? 0.9 : depth === 1 ? 1.7 : 2.7;
+
+        nextParticles.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          vx: 0.5 + Math.random() * 0.9,
+          vy: speed + Math.random() * 0.8,
+          size,
+          angle: 0,
+          vAngle: 0,
+          flip: 0,
+          vFlip: 0,
+          wobble: Math.random() * Math.PI * 2,
+          vWobble: 0.02 + Math.random() * 0.03,
+          type: 'snow',
+          colorStart: '#ffffff',
+          colorEnd: '#ffffff',
+          opacity: depth === 0 ? 0.45 : depth === 1 ? 0.75 : 0.95,
+          depth,
+        });
+      }
+    } else if (season === 'spring') {
+      const numPetals = 30;
+      for (let i = 0; i < numPetals; i++) {
+        nextParticles.push({
+          x: Math.random() * width,
+          y: Math.random() * height - height * 0.2,
+          vx: 1.2 + Math.random() * 1.6,
+          vy: 0.9 + Math.random() * 1.5,
+          size: 9 + Math.random() * 7,
+          angle: Math.random() * Math.PI * 2,
+          vAngle: (Math.random() - 0.5) * 0.08,
+          flip: Math.random() * Math.PI,
+          vFlip: 0.04 + Math.random() * 0.06,
+          wobble: Math.random() * Math.PI * 2,
+          vWobble: 0.04 + Math.random() * 0.05,
+          type: 'petal',
+          colorStart: '#f43f5e',
+          colorEnd: '#fbcfe8',
+          opacity: 0.85 + Math.random() * 0.15,
+          depth: i % 3,
+        });
+      }
+    }
+
+    particlesRef.current = nextParticles;
+  }, []);
+
+  // Reage à mudança de estação usando coordenadas CSS reais do container
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+    const container = containerRef.current;
+    if (!container) return;
+    const rect = container.getBoundingClientRect();
 
     if (selectedSeason === 'winter' && prevSeasonRef.current !== 'winter') {
-      triggerWinterLeafBurst(canvas.width, canvas.height);
+      triggerWinterLeafBurst(rect.width, rect.height);
     }
     prevSeasonRef.current = selectedSeason;
-    syncParticles(selectedSeason, canvas.width, canvas.height);
+    syncParticles(selectedSeason, rect.width, rect.height);
   }, [selectedSeason, syncParticles, triggerWinterLeafBurst]);
 
   // Loop de Renderização no Canvas (60 FPS)
@@ -547,7 +683,7 @@ export const SeasonTreeInteractive: React.FC<SeasonTreeProps> = ({
       const dpr = window.devicePixelRatio || 1;
       canvas.width = rect.width * dpr;
       canvas.height = rect.height * dpr;
-      ctx.scale(dpr, dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       syncParticles(selectedSeason, rect.width, rect.height);
     };
 
@@ -570,14 +706,16 @@ export const SeasonTreeInteractive: React.FC<SeasonTreeProps> = ({
       }
 
       const particles = particlesRef.current;
+      const extraWind = windBoostRef.current;
+
       for (let i = particles.length - 1; i >= 0; i--) {
         const p = particles[i];
 
         p.wobble += p.vWobble;
-        p.angle += p.vAngle;
-        p.flip += p.vFlip;
+        p.angle += p.vAngle + extraWind * 0.015;
+        p.flip += p.vFlip + extraWind * 0.02;
 
-        const windDrift = Math.sin(p.wobble) * 1.5;
+        const windDrift = Math.sin(p.wobble) * 1.5 + extraWind;
         p.x += p.vx + windDrift;
         p.y += p.vy;
 
@@ -638,43 +776,53 @@ export const SeasonTreeInteractive: React.FC<SeasonTreeProps> = ({
     };
   }, [selectedSeason, drawDetailedLeafOnCanvas, drawSakuraPetalOnCanvas, drawVolumetricSunRays, syncParticles]);
 
+  const handleSceneClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const clickX = e.clientX - rect.left;
+    const clickY = e.clientY - rect.top;
+    triggerInteractiveGust(clickX, clickY);
+  };
+
   return (
     <div className="space-y-6">
-      {/* Barra de Controle de Simulação Gravada do Ciclo de Vida */}
+      {/* Barra de Controle de Simulação e Interação de Vento */}
       <div className="flex flex-wrap items-center justify-between gap-4 p-4 rounded-2xl bg-gradient-to-r from-emerald-100/90 via-teal-100/80 to-indigo-100/90 border-2 border-emerald-300 shadow-md">
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
           <button
             type="button"
             onClick={toggleSimulation}
-            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-black text-sm transition-all shadow-md cursor-pointer ${
-              isSimulating
-                ? 'bg-rose-600 hover:bg-rose-500 text-white ring-4 ring-rose-300/40 animate-pulse'
-                : 'bg-emerald-600 hover:bg-emerald-500 text-white ring-4 ring-emerald-300/40 hover:scale-105'
-            }`}
+            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-black text-sm transition-all cursor-pointer border-b-4 active:border-b-0 active:translate-y-1 ${isSimulating
+                ? 'bg-rose-600 hover:bg-rose-500 border-rose-800 text-white ring-4 ring-rose-300/40 animate-pulse'
+                : 'bg-emerald-600 hover:bg-emerald-500 border-emerald-800 text-white ring-4 ring-emerald-300/40 hover:scale-105'
+              }`}
           >
             {isSimulating ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
-            <span>{isSimulating ? 'Pausar Simulação Gravada' : '▶ Assistir Simulação Gravada do Ciclo'}</span>
+            <span>{isSimulating ? 'Pausar Simulação do Ciclo' : '▶ Assistir Ciclo Completo'}</span>
           </button>
-          <span className="text-xs font-bold text-slate-700 hidden sm:inline">
-            {isSimulating
-              ? 'Transição automática do ciclo botânico ativa!'
-              : 'Clique para ver as folhas nascerem, crescerem, envelhecerem e caírem em sequência contínua.'}
-          </span>
+
+          <button
+            type="button"
+            onClick={() => triggerInteractiveGust()}
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full font-black text-sm bg-sky-500 hover:bg-sky-400 text-white border-b-4 border-sky-700 active:border-b-0 active:translate-y-1 transition-all cursor-pointer shadow-sm"
+          >
+            <Wind className="w-4 h-4" />
+            <span>Soprar Vento!</span>
+          </button>
         </div>
 
         {/* Indicador do Estágio Biológico */}
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white/80 border border-slate-300 text-xs font-extrabold text-slate-800 shadow-sm">
-          <Sparkles className="w-4 h-4 text-amber-500" />
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white/90 border border-slate-300 text-xs font-extrabold text-slate-800 shadow-sm">
+          <Sparkles className="w-4 h-4 text-amber-500 shrink-0" />
           <span>
-            {selectedSeason === 'spring' && '🌱 Fase 1: Nascimento & Crescimento Lento das Folhas'}
+            {selectedSeason === 'spring' && '🌱 Fase 1: Nascimento & Brotação Lenta das Folhas'}
             {selectedSeason === 'summer' && '☀️ Fase 2: Plenitude & Máxima Fotossíntese'}
-            {selectedSeason === 'autumn' && '🍂 Fase 3: Envelhecimento, Amarelamento & Secagem'}
-            {selectedSeason === 'winter' && '❄️ Fase 4: Queda Total (Morte Sazonal) & Árvore Nua'}
+            {selectedSeason === 'autumn' && '🍂 Fase 3: Envelhecimento, Amarelamento & Queda'}
+            {selectedSeason === 'winter' && '❄️ Fase 4: Dormência Sazonal & Árvore Nua Protegida'}
           </span>
         </div>
       </div>
 
-      {/* 4 Botões Seletores das Estações */}
+      {/* 4 Botões Seletores das Estações (Estilo Tátil 3D) */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <button
           type="button"
@@ -682,18 +830,16 @@ export const SeasonTreeInteractive: React.FC<SeasonTreeProps> = ({
             setIsSimulating(false);
             onSelectSeason('summer');
           }}
-          className={`p-4 rounded-2xl border-2 transition-all flex flex-col justify-between text-left cursor-pointer ${
-            selectedSeason === 'summer'
-              ? 'bg-gradient-to-br from-amber-400 via-amber-500 to-orange-500 text-white border-amber-500 shadow-xl scale-105 ring-4 ring-amber-300/40'
-              : 'bg-white/80 hover:bg-white text-slate-800 border-amber-200 hover:scale-105 hover:shadow-md'
-          }`}
+          className={`p-4 rounded-2xl border-2 border-b-4 transition-all flex flex-col justify-between text-left cursor-pointer active:translate-y-1 ${selectedSeason === 'summer'
+              ? 'bg-gradient-to-br from-amber-400 via-amber-500 to-orange-500 text-white border-amber-600 shadow-xl scale-105 ring-4 ring-amber-300/40'
+              : 'bg-white/90 hover:bg-white text-slate-800 border-amber-200 border-b-amber-300 hover:scale-105 hover:shadow-md'
+            }`}
         >
           <div className="flex items-center justify-between w-full mb-2">
             <span className="text-4xl">☀️</span>
             <span
-              className={`text-[10px] font-black uppercase px-2 py-0.5 rounded-full ${
-                selectedSeason === 'summer' ? 'bg-white/25 text-white' : 'bg-amber-100 text-amber-800'
-              }`}
+              className={`text-[10px] font-black uppercase px-2 py-0.5 rounded-full ${selectedSeason === 'summer' ? 'bg-white/25 text-white' : 'bg-amber-100 text-amber-800'
+                }`}
             >
               Vigor Máximo
             </span>
@@ -712,18 +858,16 @@ export const SeasonTreeInteractive: React.FC<SeasonTreeProps> = ({
             setIsSimulating(false);
             onSelectSeason('autumn');
           }}
-          className={`p-4 rounded-2xl border-2 transition-all flex flex-col justify-between text-left cursor-pointer ${
-            selectedSeason === 'autumn'
-              ? 'bg-gradient-to-br from-amber-500 via-orange-500 to-red-600 text-white border-orange-500 shadow-xl scale-105 ring-4 ring-orange-300/40'
-              : 'bg-white/80 hover:bg-white text-slate-800 border-orange-200 hover:scale-105 hover:shadow-md'
-          }`}
+          className={`p-4 rounded-2xl border-2 border-b-4 transition-all flex flex-col justify-between text-left cursor-pointer active:translate-y-1 ${selectedSeason === 'autumn'
+              ? 'bg-gradient-to-br from-amber-500 via-orange-500 to-red-600 text-white border-red-700 shadow-xl scale-105 ring-4 ring-orange-300/40'
+              : 'bg-white/90 hover:bg-white text-slate-800 border-orange-200 border-b-orange-300 hover:scale-105 hover:shadow-md'
+            }`}
         >
           <div className="flex items-center justify-between w-full mb-2">
             <span className="text-4xl">🍂</span>
             <span
-              className={`text-[10px] font-black uppercase px-2 py-0.5 rounded-full ${
-                selectedSeason === 'autumn' ? 'bg-white/25 text-white' : 'bg-orange-100 text-orange-800'
-              }`}
+              className={`text-[10px] font-black uppercase px-2 py-0.5 rounded-full ${selectedSeason === 'autumn' ? 'bg-white/25 text-white' : 'bg-orange-100 text-orange-800'
+                }`}
             >
               Envelhecimento
             </span>
@@ -742,18 +886,16 @@ export const SeasonTreeInteractive: React.FC<SeasonTreeProps> = ({
             setIsSimulating(false);
             onSelectSeason('winter');
           }}
-          className={`p-4 rounded-2xl border-2 transition-all flex flex-col justify-between text-left cursor-pointer ${
-            selectedSeason === 'winter'
-              ? 'bg-gradient-to-br from-sky-500 via-blue-600 to-indigo-700 text-white border-blue-500 shadow-xl scale-105 ring-4 ring-sky-300/40'
-              : 'bg-white/80 hover:bg-white text-slate-800 border-sky-200 hover:scale-105 hover:shadow-md'
-          }`}
+          className={`p-4 rounded-2xl border-2 border-b-4 transition-all flex flex-col justify-between text-left cursor-pointer active:translate-y-1 ${selectedSeason === 'winter'
+              ? 'bg-gradient-to-br from-sky-500 via-blue-600 to-indigo-700 text-white border-indigo-900 shadow-xl scale-105 ring-4 ring-sky-300/40'
+              : 'bg-white/90 hover:bg-white text-slate-800 border-sky-200 border-b-sky-300 hover:scale-105 hover:shadow-md'
+            }`}
         >
           <div className="flex items-center justify-between w-full mb-2">
             <span className="text-4xl">❄️</span>
             <span
-              className={`text-[10px] font-black uppercase px-2 py-0.5 rounded-full ${
-                selectedSeason === 'winter' ? 'bg-white/25 text-white' : 'bg-sky-100 text-sky-800'
-              }`}
+              className={`text-[10px] font-black uppercase px-2 py-0.5 rounded-full ${selectedSeason === 'winter' ? 'bg-white/25 text-white' : 'bg-sky-100 text-sky-800'
+                }`}
             >
               Queda Total
             </span>
@@ -772,18 +914,16 @@ export const SeasonTreeInteractive: React.FC<SeasonTreeProps> = ({
             setIsSimulating(false);
             onSelectSeason('spring');
           }}
-          className={`p-4 rounded-2xl border-2 transition-all flex flex-col justify-between text-left cursor-pointer ${
-            selectedSeason === 'spring'
-              ? 'bg-gradient-to-br from-pink-400 via-rose-400 to-emerald-500 text-white border-pink-400 shadow-xl scale-105 ring-4 ring-pink-300/40'
-              : 'bg-white/80 hover:bg-white text-slate-800 border-pink-200 hover:scale-105 hover:shadow-md'
-          }`}
+          className={`p-4 rounded-2xl border-2 border-b-4 transition-all flex flex-col justify-between text-left cursor-pointer active:translate-y-1 ${selectedSeason === 'spring'
+              ? 'bg-gradient-to-br from-pink-400 via-rose-400 to-emerald-500 text-white border-emerald-700 shadow-xl scale-105 ring-4 ring-pink-300/40'
+              : 'bg-white/90 hover:bg-white text-slate-800 border-pink-200 border-b-pink-300 hover:scale-105 hover:shadow-md'
+            }`}
         >
           <div className="flex items-center justify-between w-full mb-2">
             <span className="text-4xl">🌸</span>
             <span
-              className={`text-[10px] font-black uppercase px-2 py-0.5 rounded-full ${
-                selectedSeason === 'spring' ? 'bg-white/25 text-white' : 'bg-pink-100 text-pink-800'
-              }`}
+              className={`text-[10px] font-black uppercase px-2 py-0.5 rounded-full ${selectedSeason === 'spring' ? 'bg-white/25 text-white' : 'bg-pink-100 text-pink-800'
+                }`}
             >
               Nascimento
             </span>
@@ -797,21 +937,25 @@ export const SeasonTreeInteractive: React.FC<SeasonTreeProps> = ({
         </button>
       </div>
 
-      {/* QUADRO AMPLIADO DA ÁRVORE (Altura expandida de 650px a 720px) */}
+      {/* QUADRO AMPLIADO DA ÁRVORE INTERATIVA */}
       <div
         ref={containerRef}
-        className={`relative rounded-[2.5rem] overflow-hidden border-4 shadow-2xl transition-all duration-700 min-h-[580px] sm:min-h-[660px] lg:min-h-[720px] flex flex-col justify-between select-none ${
-          selectedSeason === 'summer'
+        onClick={handleSceneClick}
+        title="Toque na árvore para agitar os galhos!"
+        className={`relative rounded-[2.5rem] overflow-hidden border-4 shadow-2xl transition-all duration-700 min-h-[580px] sm:min-h-[660px] lg:min-h-[720px] flex flex-col justify-between select-none cursor-pointer ${selectedSeason === 'summer'
             ? 'border-amber-300 bg-gradient-to-b from-sky-400 via-sky-200 to-amber-50'
             : selectedSeason === 'autumn'
-            ? 'border-orange-300 bg-gradient-to-b from-amber-200 via-orange-100 to-stone-100'
-            : selectedSeason === 'winter'
-            ? 'border-sky-300 bg-gradient-to-b from-slate-800 via-slate-900 to-indigo-950'
-            : 'border-pink-300 bg-gradient-to-b from-pink-100 via-sky-100 to-emerald-50'
-        }`}
+              ? 'border-orange-300 bg-gradient-to-b from-amber-300 via-orange-100 to-stone-100'
+              : selectedSeason === 'winter'
+                ? 'border-sky-300 bg-gradient-to-b from-slate-900 via-indigo-950 to-slate-800'
+                : 'border-pink-300 bg-gradient-to-b from-pink-200 via-sky-100 to-emerald-50'
+          }`}
       >
         {/* Barra de Status no Topo do Cenário */}
-        <div className="relative z-30 flex flex-wrap items-center justify-between gap-3 p-4 bg-white/80 backdrop-blur-md border-b border-black/10">
+        <div
+          onClick={(e) => e.stopPropagation()}
+          className="relative z-30 flex flex-wrap items-center justify-between gap-3 p-4 bg-white/85 backdrop-blur-md border-b border-black/10 cursor-default"
+        >
           <div className="flex items-center gap-3">
             <span className="text-3xl">
               {selectedSeason === 'summer' && '☀️'}
@@ -821,43 +965,49 @@ export const SeasonTreeInteractive: React.FC<SeasonTreeProps> = ({
             </span>
             <div>
               <span className="text-[10px] font-black uppercase tracking-wider text-slate-500 block">
-                Simulação Botânica das Folhas
+                Simulação Botânica Interativa (Toque na Copa!)
               </span>
               <span className="text-base sm:text-lg font-black text-slate-900">
                 {selectedSeason === 'summer' && 'Verão · Maturidade Máxima, Fotossíntese & Raios Solares'}
                 {selectedSeason === 'autumn' && 'Outono · Envelhecimento, Amarelamento & Queda Suave'}
-                {selectedSeason === 'winter' && 'Inverno · Morte Sazonal, Folhas Caem Tudo & Árvore Nua'}
+                {selectedSeason === 'winter' && 'Inverno · Dormência Sazonal, Gelo nos Galhos & Árvore Nua'}
                 {selectedSeason === 'spring' && 'Primavera · Nascimento, Folhas Crescem Devagar & Floração'}
               </span>
             </div>
           </div>
 
-          <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/95 border border-slate-300 shadow-sm text-xs font-black">
-            <span
-              className={`w-3 h-3 rounded-full animate-pulse ${
-                selectedSeason === 'summer'
-                  ? 'bg-red-500'
-                  : selectedSeason === 'autumn'
-                  ? 'bg-amber-500'
-                  : selectedSeason === 'winter'
-                  ? 'bg-sky-400'
-                  : 'bg-emerald-500'
-              }`}
-            />
-            <span className="text-slate-800">
-              {selectedSeason === 'summer' && '34°C · Clorofila Plena 🔥'}
-              {selectedSeason === 'autumn' && '19°C · Secagem das Folhas 🍂'}
-              {selectedSeason === 'winter' && '2°C · Dormência Nua 🧊'}
-              {selectedSeason === 'spring' && '24°C · Brotação & Seiva 🌸'}
+          <div className="flex items-center gap-2">
+            <span className="hidden md:inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-100/90 text-amber-900 text-xs font-bold border border-amber-300">
+              <MousePointerClick className="w-3.5 h-3.5" />
+              Toque na árvore!
             </span>
+            <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/95 border border-slate-300 shadow-sm text-xs font-black">
+              <span
+                className={`w-3 h-3 rounded-full animate-pulse ${selectedSeason === 'summer'
+                    ? 'bg-red-500'
+                    : selectedSeason === 'autumn'
+                      ? 'bg-amber-500'
+                      : selectedSeason === 'winter'
+                        ? 'bg-sky-400'
+                        : 'bg-emerald-500'
+                  }`}
+              />
+              <span className="text-slate-800">
+                {selectedSeason === 'summer' && '34°C · Clorofila Plena 🔥'}
+                {selectedSeason === 'autumn' && '19°C · Secagem Foliar 🍂'}
+                {selectedSeason === 'winter' && '2°C · Dormência Nua 🧊'}
+                {selectedSeason === 'spring' && '24°C · Brotação & Seiva 🌸'}
+              </span>
+            </div>
           </div>
         </div>
 
-        {/* Camada Intermediária: Desenho Majestoso da Árvore Vetorial com FOLHAS BOTÂNICAS DETALHADAS */}
+        {/* Camada Intermediária: Desenho Majestoso da Árvore Vetorial com Astros, Relevo e Folhas Botânicas */}
         <div className="absolute inset-0 z-10 pointer-events-none flex items-center justify-center">
           <svg
             viewBox="0 0 900 620"
-            className="w-full h-full select-none"
+            className={`w-full h-full select-none transition-transform duration-500 ${treeSway ? 'scale-[1.01] rotate-[0.6deg]' : 'scale-100 rotate-0'
+              }`}
             preserveAspectRatio="xMidYMid meet"
           >
             <defs>
@@ -870,17 +1020,84 @@ export const SeasonTreeInteractive: React.FC<SeasonTreeProps> = ({
                 <stop offset="100%" stopColor="#2e1302" />
               </linearGradient>
 
+              {/* Arco-íris suave para a Primavera */}
+              <linearGradient id="springRainbow" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stopColor="#f43f5e" stopOpacity="0.18" />
+                <stop offset="35%" stopColor="#facc15" stopOpacity="0.18" />
+                <stop offset="70%" stopColor="#4ade80" stopOpacity="0.18" />
+                <stop offset="100%" stopColor="#38bdf8" stopOpacity="0.18" />
+              </linearGradient>
+
               {/* Filtro de Sombra Suave para as Folhas */}
               <filter id="leafShadow" x="-20%" y="-20%" width="140%" height="140%">
-                <feDropShadow dx="0" dy="2" stdDeviation="1.5" floodColor="#000000" floodOpacity="0.18" />
+                <feDropShadow dx="0" dy="2" stdDeviation="1.5" floodColor="#000000" floodOpacity="0.2" />
               </filter>
             </defs>
 
-            {/* Chão e Colinas Conforme a Estação */}
+            {/* ELEMENTOS CELESTES DE FUNDO CONFORME A ESTAÇÃO */}
+            {selectedSeason === 'summer' && (
+              <g>
+                <circle cx="125" cy="105" r="68" fill="#fef08a" opacity="0.25" />
+                <circle cx="125" cy="105" r="48" fill="#fde047" opacity="0.45" />
+                <circle cx="125" cy="105" r="32" fill="#facc15" />
+              </g>
+            )}
+
+            {selectedSeason === 'spring' && (
+              <g>
+                <path
+                  d="M 80 480 A 380 340 0 0 1 820 480"
+                  fill="none"
+                  stroke="url(#springRainbow)"
+                  strokeWidth="28"
+                  strokeLinecap="round"
+                />
+                <circle cx="145" cy="115" r="38" fill="#fef08a" opacity="0.7" />
+              </g>
+            )}
+
+            {selectedSeason === 'autumn' && (
+              <g opacity="0.75">
+                <circle cx="750" cy="120" r="42" fill="#fb923c" opacity="0.45" />
+                {/* Nuvens de vento de Outono */}
+                <path
+                  d="M 110 125 Q 140 105 175 120 Q 210 100 240 125 Z"
+                  fill="#fed7aa"
+                  opacity="0.65"
+                />
+                <path
+                  d="M 660 95 Q 700 75 735 90 Q 770 75 800 95 Z"
+                  fill="#ffedd5"
+                  opacity="0.6"
+                />
+              </g>
+            )}
+
+            {selectedSeason === 'winter' && (
+              <g>
+                {/* Estrelas cintilantes no céu noturno de inverno */}
+                {WINTER_STARS.map((star, idx) => (
+                  <circle
+                    key={idx}
+                    cx={star.cx}
+                    cy={star.cy}
+                    r={star.r}
+                    fill="#ffffff"
+                    opacity={star.opacity}
+                  />
+                ))}
+                {/* Lua Crescente */}
+                <circle cx="760" cy="105" r="34" fill="#fef9c3" opacity="0.95" />
+                <circle cx="746" cy="96" r="28" fill="#0f172a" />
+              </g>
+            )}
+
+            {/* CHÃO, COLINAS E TAPETE NATURAL CONFORME A ESTAÇÃO */}
             {selectedSeason === 'summer' && (
               <g>
                 <path d="M 0 500 Q 220 470 450 500 T 900 480 L 900 620 L 0 620 Z" fill="#15803d" />
                 <path d="M 0 530 Q 300 490 600 530 T 900 510 L 900 620 L 0 620 Z" fill="#166534" />
+                <ellipse cx="450" cy="548" rx="185" ry="22" fill="#14532d" opacity="0.45" />
                 <circle cx="180" cy="540" r="4.5" fill="#fef08a" />
                 <circle cx="280" cy="555" r="4" fill="#f472b6" />
                 <circle cx="650" cy="545" r="4.5" fill="#fde047" />
@@ -892,12 +1109,12 @@ export const SeasonTreeInteractive: React.FC<SeasonTreeProps> = ({
               <g>
                 <path d="M 0 500 Q 220 470 450 500 T 900 480 L 900 620 L 0 620 Z" fill="#b45309" />
                 <path d="M 0 530 Q 300 495 600 530 T 900 510 L 900 620 L 0 620 Z" fill="#78350f" />
-                {/* Montes de folhas caídas mortas ao redor do tronco */}
-                <ellipse cx="450" cy="550" rx="140" ry="24" fill="#c2410c" opacity="0.95" />
-                <ellipse cx="380" cy="560" rx="75" ry="18" fill="#ea580c" />
-                <ellipse cx="520" cy="558" rx="85" ry="20" fill="#d97706" />
-                <ellipse cx="310" cy="565" rx="50" ry="14" fill="#b45309" />
-                <ellipse cx="590" cy="567" rx="60" ry="15" fill="#dc2626" />
+                {/* Montes de folhas caídas secas ao redor do tronco */}
+                <ellipse cx="450" cy="550" rx="150" ry="24" fill="#c2410c" opacity="0.95" />
+                <ellipse cx="380" cy="560" rx="80" ry="18" fill="#ea580c" />
+                <ellipse cx="520" cy="558" rx="90" ry="20" fill="#d97706" />
+                <ellipse cx="310" cy="565" rx="55" ry="14" fill="#b45309" />
+                <ellipse cx="590" cy="567" rx="65" ry="15" fill="#dc2626" />
               </g>
             )}
 
@@ -905,9 +1122,9 @@ export const SeasonTreeInteractive: React.FC<SeasonTreeProps> = ({
               <g>
                 <path d="M 0 500 Q 220 475 450 500 T 900 485 L 900 620 L 0 620 Z" fill="#cbd5e1" />
                 <path d="M 0 525 Q 300 495 600 525 T 900 505 L 900 620 L 0 620 Z" fill="#f8fafc" />
-                <ellipse cx="450" cy="555" rx="150" ry="26" fill="#ffffff" />
-                <ellipse cx="370" cy="565" rx="80" ry="18" fill="#f1f5f9" />
-                <ellipse cx="530" cy="562" rx="90" ry="20" fill="#ffffff" />
+                <ellipse cx="450" cy="555" rx="160" ry="26" fill="#ffffff" />
+                <ellipse cx="370" cy="565" rx="85" ry="18" fill="#e2e8f0" />
+                <ellipse cx="530" cy="562" rx="95" ry="20" fill="#ffffff" />
               </g>
             )}
 
@@ -916,17 +1133,19 @@ export const SeasonTreeInteractive: React.FC<SeasonTreeProps> = ({
                 <path d="M 0 500 Q 220 470 450 500 T 900 480 L 900 620 L 0 620 Z" fill="#16a34a" />
                 <path d="M 0 530 Q 300 490 600 530 T 900 510 L 900 620 L 0 620 Z" fill="#15803d" />
                 <circle cx="200" cy="540" r="5" fill="#f472b6" />
+                <circle cx="245" cy="565" r="4" fill="#fef08a" />
                 <circle cx="320" cy="555" r="4.5" fill="#f43f5e" />
                 <circle cx="630" cy="545" r="5" fill="#fb7185" />
+                <circle cx="690" cy="562" r="4" fill="#ffffff" />
                 <circle cx="750" cy="535" r="4.5" fill="#fef08a" />
               </g>
             )}
 
-            {/* Tronco Central Majestoso e Raízes */}
+            {/* TRONCO CENTRAL MAJESTOSO, VEIOS DA CASCA E GALHOS */}
             <g>
-              {/* Raízes no chão */}
+              {/* Raízes expostas no solo */}
               <path
-                d="M 370 620 Q 400 560 420 520 L 480 520 Q 500 560 530 620 Z"
+                d="M 365 620 Q 400 560 420 520 L 480 520 Q 500 560 535 620 Z"
                 fill="url(#treeBarkTexture)"
               />
               {/* Tronco principal */}
@@ -935,7 +1154,12 @@ export const SeasonTreeInteractive: React.FC<SeasonTreeProps> = ({
                 fill="url(#treeBarkTexture)"
               />
 
-              {/* Sistema de Galhos Primários e Secundários Elegantes */}
+              {/* Textura orgânica interna do tronco e abrigo natural */}
+              <ellipse cx="455" cy="415" rx="14" ry="22" fill="#1e0b01" stroke="#451a03" strokeWidth="3" />
+              <path d="M 432 515 Q 438 440 430 350" stroke="#3b1906" strokeWidth="3" fill="none" strokeLinecap="round" opacity="0.7" />
+              <path d="M 480 520 Q 475 430 482 340" stroke="#3b1906" strokeWidth="3" fill="none" strokeLinecap="round" opacity="0.7" />
+
+              {/* Sistema de Galhos Primários e Secundários */}
               {/* Lado Esquerdo */}
               <path d="M 330 220 Q 280 180 230 170" stroke="url(#treeBarkTexture)" strokeWidth="12" strokeLinecap="round" fill="none" />
               <path d="M 270 185 Q 240 145 205 140" stroke="url(#treeBarkTexture)" strokeWidth="7" strokeLinecap="round" fill="none" />
@@ -955,7 +1179,7 @@ export const SeasonTreeInteractive: React.FC<SeasonTreeProps> = ({
               <path d="M 500 290 Q 570 315 640 325" stroke="url(#treeBarkTexture)" strokeWidth="11" strokeLinecap="round" fill="none" />
               <path d="M 570 305 Q 625 355 680 365" stroke="url(#treeBarkTexture)" strokeWidth="7" strokeLinecap="round" fill="none" />
 
-              {/* Camadas Realistas de Neve sobre os Galhos no Inverno */}
+              {/* Camadas Realistas de Neve e Pingentes de Gelo sobre os Galhos no Inverno */}
               {selectedSeason === 'winter' && (
                 <g className="transition-opacity duration-700">
                   <path d="M 410 320 C 418 280 370 240 290 200" stroke="#ffffff" strokeWidth="8" strokeLinecap="round" fill="none" />
@@ -969,42 +1193,45 @@ export const SeasonTreeInteractive: React.FC<SeasonTreeProps> = ({
                   <path d="M 580 190 Q 615 140 655 125" stroke="#ffffff" strokeWidth="5" strokeLinecap="round" fill="none" />
                   <path d="M 500 290 Q 570 315 640 325" stroke="#ffffff" strokeWidth="8" strokeLinecap="round" fill="none" />
                   <path d="M 420 260 Q 450 240 480 255" stroke="#ffffff" strokeWidth="9" strokeLinecap="round" fill="none" />
+
+                  {/* Pingentes de gelo cristalinos pendurados */}
+                  {WINTER_ICICLES.map((ic, i) => (
+                    <polygon
+                      key={i}
+                      points={`${ic.x - 3.5},${ic.y} ${ic.x + 3.5},${ic.y} ${ic.x},${ic.y + ic.len}`}
+                      fill="#e0f2fe"
+                      opacity="0.88"
+                    />
+                  ))}
                 </g>
               )}
             </g>
 
-            {/* CONJUNTO BOTÂNICO DE FOLHAS DETALHADAS NA COPA (Zero círculos!) */}
+            {/* CONJUNTO BOTÂNICO DE 74 FOLHAS DETALHADAS NA COPA */}
             <g>
               {TREE_LEAVES_DATA.map((leaf) => {
-                // Cálculo dinâmico do estado biológico da folha:
-                // 1. Primavera: Nascimento e brotação lenta (cresce de scale 0.25 até scale normal com delay progressivo)
-                // 2. Verão: Maturidade total (scale 1.05 a 1.25), verde pleno
-                // 3. Outono: Envelhecimento (mudança de cor para amarelo, âmbar e vermelho, leve murcha)
-                // 4. Inverno: Morte sazonal (todas se soltam e somem, deixando a árvore nua)
-
                 let currentScale = leaf.scale;
                 let currentColor = leaf.summerColor;
                 let veinColor = '#86efac';
                 let opacity = 1;
 
                 if (selectedSeason === 'spring') {
-                  currentScale = leaf.scale * 0.72; // brotando e crescendo devagar
+                  currentScale = leaf.scale * 0.76; // Brotos jovens em crescimento
                   currentColor = leaf.springColor;
                   veinColor = '#bbf7d0';
-                  opacity = 0.95;
+                  opacity = 0.96;
                 } else if (selectedSeason === 'summer') {
-                  currentScale = leaf.scale * 1.15; // no auge do crescimento
+                  currentScale = leaf.scale * 1.15; // Auge da maturidade foliar
                   currentColor = leaf.summerColor;
                   veinColor = '#86efac';
                   opacity = 1;
                 } else if (selectedSeason === 'autumn') {
-                  currentScale = leaf.scale * 0.98; // levemente murcha e seca
+                  currentScale = leaf.scale * 0.96; // Leve retração por secagem
                   currentColor = leaf.autumnColor;
                   veinColor = '#fef08a';
-                  opacity = 0.9;
+                  opacity = 0.92;
                 } else if (selectedSeason === 'winter') {
-                  // No inverno caem tudo de vez deixando a árvore nua!
-                  currentScale = 0;
+                  currentScale = 0; // Árvore totalmente nua no inverno
                   opacity = 0;
                 }
 
@@ -1013,7 +1240,7 @@ export const SeasonTreeInteractive: React.FC<SeasonTreeProps> = ({
                     key={leaf.id}
                     transform={`translate(${leaf.x}, ${leaf.y}) rotate(${leaf.angle}) scale(${currentScale})`}
                     style={{
-                      transition: `transform ${selectedSeason === 'spring' ? 1.6 + leaf.growthDelay : 1.0}s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.8s ease-out`,
+                      transition: `transform ${selectedSeason === 'spring' ? 1.4 + leaf.growthDelay * 0.7 : 0.9}s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.7s ease-out`,
                       transformOrigin: '0 0',
                     }}
                     opacity={opacity}
@@ -1021,7 +1248,7 @@ export const SeasonTreeInteractive: React.FC<SeasonTreeProps> = ({
                     {/* Haste botânica da folha ancorada no ramo */}
                     <line x1="0" y1="0" x2="0" y2="9" stroke="#451a03" strokeWidth="1.6" strokeLinecap="round" />
 
-                    {/* Lâmina da Folha Detalhada com Recorte Anatômico (Bordo / Carvalho) */}
+                    {/* Lâmina da Folha Detalhada com Recorte Anatômico */}
                     <path
                       d="M 0 0 C -6 -12, -18 -22, -16 -34 C -14 -42, -7 -50, 0 -62 C 7 -50, 14 -42, 16 -34 C 18 -22, 6 -12, 0 0 Z"
                       fill={currentColor}
@@ -1045,22 +1272,22 @@ export const SeasonTreeInteractive: React.FC<SeasonTreeProps> = ({
               })}
             </g>
 
-            {/* Flores Desabrochando na Primavera */}
+            {/* Flores de Cerejeira (Sakura) Desabrochando na Primavera */}
             {selectedSeason === 'spring' && (
-              <g className="transition-all duration-1000">
+              <g>
                 {SPRING_BLOSSOMS.map((fl, idx) => (
                   <g
                     key={idx}
                     transform={`translate(${fl.x}, ${fl.y}) scale(${fl.s})`}
-                    className="animate-[bloomIn_1s_ease-out]"
+                    style={{
+                      transition: `transform ${0.8 + fl.delay}s cubic-bezier(0.34, 1.56, 0.64, 1)`,
+                    }}
                   >
-                    {/* 5 pétalas em degradê floral */}
                     <circle cx="-6" cy="-3" r="5.5" fill="#f43f5e" opacity="0.95" />
                     <circle cx="6" cy="-3" r="5.5" fill="#f43f5e" opacity="0.95" />
                     <circle cx="0" cy="-7" r="5.5" fill="#fb7185" opacity="0.95" />
                     <circle cx="-4" cy="5" r="5.5" fill="#fbcfe8" opacity="0.95" />
                     <circle cx="4" cy="5" r="5.5" fill="#fbcfe8" opacity="0.95" />
-                    {/* Miolo dourado com estames */}
                     <circle cx="0" cy="0" r="3.8" fill="#fef08a" />
                     <circle cx="0" cy="0" r="1.8" fill="#f59e0b" />
                   </g>
@@ -1077,7 +1304,10 @@ export const SeasonTreeInteractive: React.FC<SeasonTreeProps> = ({
         />
 
         {/* Rodapé Científico com Detalhes do Eixo e Fotossíntese */}
-        <div className="relative z-30 px-5 py-3.5 bg-black/50 backdrop-blur-md text-white flex flex-wrap items-center justify-between gap-3 text-xs sm:text-sm">
+        <div
+          onClick={(e) => e.stopPropagation()}
+          className="relative z-30 px-5 py-3.5 bg-black/55 backdrop-blur-md text-white flex flex-wrap items-center justify-between gap-3 text-xs sm:text-sm cursor-default"
+        >
           <div className="flex items-center gap-2">
             <span className="font-extrabold text-amber-300">🔬 Ciclo Biológico:</span>
             <span className="font-semibold text-slate-100">
@@ -1105,7 +1335,7 @@ export const SeasonTreeInteractive: React.FC<SeasonTreeProps> = ({
           <h4 className="text-lg font-black text-slate-900">
             {selectedSeason === 'summer' && 'Verão: Maturidade Plena, Clorofila & Raios Solares Diretos'}
             {selectedSeason === 'autumn' && 'Outono: Envelhecimento, Amarelamento & Desprendimento das Folhas'}
-            {selectedSeason === 'winter' && 'Inverno: Morte Sazonal das Folhas & A Árvore Nua Protegida'}
+            {selectedSeason === 'winter' && 'Inverno: Dormência Sazonal das Folhas & A Árvore Nua Protegida'}
             {selectedSeason === 'spring' && 'Primavera: Nascimento Lento dos Brotos, Floração & Renascimento'}
           </h4>
         </div>
@@ -1113,17 +1343,17 @@ export const SeasonTreeInteractive: React.FC<SeasonTreeProps> = ({
         <p className={`text-slate-700 leading-relaxed font-medium ${largeTextMode ? 'text-base' : 'text-sm'}`}>
           {selectedSeason === 'summer' && (
             <>
-              No <strong>VERÃO</strong>, a inclinação de 23,5° da Terra faz com que o hemisfério receba luz solar <strong>direta e concentrada</strong>. Cada folha da árvore está no seu ápice de crescimento e tamanho, realizando fotossíntese vigorosa. Os raios solares em degradê alimentam a produção intensa de clorofila verde que reveste os galhos com força vital!
+              No <strong>VERÃO</strong>, a inclinação de 23,5° da Terra faz com que o hemisfério receba luz solar <strong>direta e concentrada</strong>. Cada folha da árvore está no seu ápice de crescimento e tamanho, realizando fotossíntese vigorosa. Os raios solares alimentam a produção intensa de clorofila verde que reveste os galhos com força vital!
             </>
           )}
           {selectedSeason === 'autumn' && (
             <>
-              No <strong>OUTONO</strong>, a translação terrestre faz os raios solares incidirem de maneira <strong>inclinada e espalhada</strong>. Com dias mais curtos e frios, a árvore começa o processo de <strong>envelhecimento foliar</strong>: para economizar água e nutrientes, ela degrada a clorofila verde. As folhas na árvore ficam amarelas, laranjas e vermelhas, ressecam e caem suavemente pelo ar até o solo!
+              No <strong>OUTONO</strong>, a translação terrestre faz os raios solares incidirem de maneira <strong>inclinada e espalhada</strong>. Com dias mais curtos e frios, a árvore começa o processo de <strong>envelhecimento foliar</strong>: para economizar água e nutrientes, ela degrada a clorofila verde. As folhas ficam amarelas, laranjas e vermelhas, ressecam e caem suavemente pelo ar até o solo!
             </>
           )}
           {selectedSeason === 'winter' && (
             <>
-              No <strong>INVERNO</strong>, com o hemisfério inclinado para longe do Sol, a luz é fraca e as temperaturas despencam. A árvore entra em <strong>dormência biológica</strong>: todas as folhas restantes caem de uma só vez (morte sazonal), deixando a árvore completamente nua. Isso evita que a neve congele e quebre os galhos com seu peso!
+              No <strong>INVERNO</strong>, com o hemisfério inclinado para longe do Sol, a luz é fraca e as temperaturas despencam. A árvore entra em <strong>dormência biológica</strong>: todas as folhas restantes caem de uma só vez, deixando a árvore completamente nua. Isso evita que a árvore perca água e impede que a neve acumule nas folhas e quebre os galhos com seu peso!
             </>
           )}
           {selectedSeason === 'spring' && (

@@ -143,12 +143,9 @@ const QUIZ_QUESTIONS: QuizQuestion[] = [
 export const SeasonsCompare: React.FC = () => {
   const { completeMission, openGlossary, largeTextMode } = useProgressStore();
 
-  // Ponto de vista do observador: 'sul' (ex: Brasil) ou 'norte' (ex: Portugal/Europa)
-  const [viewHemisphere, setViewHemisphere] = useState<'sul' | 'norte'>('sul');
-  
-  // Estação ativa no Hemisfério Sul (referência planetária)
-  const [selectedSouthId, setSelectedSouthId] = useState<SeasonDetail['id']>('verao');
-  const [exploredSeasons, setExploredSeasons] = useState<string[]>(['verao']);
+  // Estação ativa na Árvore e no laboratório
+  const [currentTreeSeason, setCurrentTreeSeason] = useState<SeasonType>('summer');
+  const [exploredSeasons, setExploredSeasons] = useState<string[]>(['summer']);
 
   // Estado do Quiz Interativo
   const [currentQuizIndex, setCurrentQuizIndex] = useState(0);
@@ -156,43 +153,24 @@ export const SeasonsCompare: React.FC = () => {
   const [quizScore, setQuizScore] = useState(0);
   const [showQuizCelebration, setShowQuizCelebration] = useState(false);
 
-  // Determinar a estação atual no Sul e no Norte
-  const southSeason = SEASONS_DATA.find((s) => s.id === selectedSouthId) || SEASONS_DATA[1];
-  const northSeasonId = OPPOSITE_SEASON_MAP[selectedSouthId];
+  // Determinar a estação atual no Sul e no Norte baseada na estação da árvore
+  const effectiveSeasonId = TREE_SEASON_TO_ID[currentTreeSeason] || 'verao';
+  const southSeason = SEASONS_DATA.find((s) => s.id === effectiveSeasonId) || SEASONS_DATA[1];
+  const northSeasonId = OPPOSITE_SEASON_MAP[effectiveSeasonId];
   const northSeason = SEASONS_DATA.find((s) => s.id === northSeasonId) || SEASONS_DATA[3];
 
-  // A estação mostrada pela árvore depende do ponto de vista do hemisfério selecionado!
-  const effectiveSeasonId = viewHemisphere === 'sul' ? selectedSouthId : northSeasonId;
-  const currentTreeSeason = ID_TO_TREE_SEASON[effectiveSeasonId] || 'summer';
   const effectiveEcoData = SEASON_ECO_MAP[effectiveSeasonId];
-  const effectiveSeasonData = viewHemisphere === 'sul' ? southSeason : northSeason;
+  const effectiveSeasonData = southSeason;
 
-  const handleSelectSeason = (id: SeasonDetail['id']) => {
-    setSelectedSouthId(id);
-    if (!exploredSeasons.includes(id)) {
-      const next = [...exploredSeasons, id];
+  const handleTreeSeasonChange = (treeSeason: SeasonType) => {
+    setCurrentTreeSeason(treeSeason);
+    if (!exploredSeasons.includes(treeSeason)) {
+      const next = [...exploredSeasons, treeSeason];
       setExploredSeasons(next);
       if (next.length >= 2) {
         completeMission(4);
       }
     }
-  };
-
-  const handleTreeSeasonChange = (treeSeason: SeasonType) => {
-    const matchingId = TREE_SEASON_TO_ID[treeSeason];
-    if (!matchingId) return;
-
-    if (viewHemisphere === 'sul') {
-      handleSelectSeason(matchingId);
-    } else {
-      // Se estamos a olhar o Norte e mudamos a árvore, invertemos para encontrar o correspondente no Sul
-      const oppositeId = OPPOSITE_SEASON_MAP[matchingId];
-      handleSelectSeason(oppositeId);
-    }
-  };
-
-  const handleToggleHemisphereView = (target: 'sul' | 'norte') => {
-    setViewHemisphere(target);
   };
 
   const handleAnswerQuiz = (optionIdx: number) => {
@@ -221,157 +199,6 @@ export const SeasonsCompare: React.FC = () => {
 
   return (
     <div className="space-y-8">
-      {/* PAINEL DE CONTROLE INTEGRADO: HEMISFÉRIO E ESTAÇÕES */}
-      <div className="bg-gradient-to-br from-indigo-950 via-slate-900 to-indigo-900 text-white rounded-3xl p-6 sm:p-8 border-4 border-indigo-400/40 shadow-2xl space-y-6">
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-400 to-yellow-300 text-amber-950 flex items-center justify-center shadow-lg font-black text-2xl">
-              🌍
-            </div>
-            <div>
-              <span className="text-xs font-black uppercase tracking-wider text-amber-300 bg-amber-400/20 px-3 py-0.5 rounded-full inline-block mb-1 border border-amber-300/30">
-                Missão 4 · O Laboratório das Quatro Estações
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-black">
-                O Espelho Planetário e a Vida na Terra
-              </h2>
-            </div>
-          </div>
-
-          <AudioButton
-            text="Bem-vindo à Missão 4 reestruturada! Aqui podes alternar a perspetiva entre o Hemisfério Sul, onde fica o Brasil, e o Hemisfério Norte, onde fica Portugal. Quando um hemisfério está inclinado para o Sol e vive o Verão, o outro está inclinado para longe e vive o Inverno!"
-            label="Ouvir instruções da missão 4"
-            size="sm"
-          />
-        </div>
-
-        {/* CONTROLE 1: PONTO DE VISTA DO HEMISFÉRIO PARA A ÁRVORE */}
-        <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20 flex flex-wrap items-center justify-between gap-4">
-          <div className="space-y-0.5">
-            <span className="text-xs font-black uppercase tracking-wider text-indigo-300">
-              Ponto de Observação da Árvore
-            </span>
-            <p className="text-sm font-bold text-white">
-              De qual lado do planeta queres olhar a natureza agora?
-            </p>
-          </div>
-
-          <div className="inline-flex p-1.5 rounded-2xl bg-slate-950/60 border border-white/20">
-            <button
-              type="button"
-              onClick={() => handleToggleHemisphereView('sul')}
-              className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-black transition-all flex items-center gap-2 cursor-pointer ${
-                viewHemisphere === 'sul'
-                  ? 'bg-emerald-500 text-white shadow-lg scale-105'
-                  : 'text-slate-300 hover:text-white hover:bg-white/10'
-              }`}
-            >
-              <span>🇧🇷</span>
-              <span>Hemisfério Sul (ex: Brasil)</span>
-              {viewHemisphere === 'sul' && <span className="w-2 h-2 rounded-full bg-white animate-pulse" />}
-            </button>
-
-            <button
-              type="button"
-              onClick={() => handleToggleHemisphereView('norte')}
-              className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-black transition-all flex items-center gap-2 cursor-pointer ${
-                viewHemisphere === 'norte'
-                  ? 'bg-purple-600 text-white shadow-lg scale-105'
-                  : 'text-slate-300 hover:text-white hover:bg-white/10'
-              }`}
-            >
-              <span>🇵🇹</span>
-              <span>Hemisfério Norte (ex: Portugal)</span>
-              {viewHemisphere === 'norte' && <span className="w-2 h-2 rounded-full bg-white animate-pulse" />}
-            </button>
-          </div>
-        </div>
-
-        {/* CONTROLE 2: SELETOR DAS 4 ESTAÇÕES (SINCRONIZADO) */}
-        <div>
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-extrabold uppercase text-amber-300 tracking-wider">
-              Escolhe a época do ano no Hemisfério Sul (o Norte ajusta-se automaticamente no espelho):
-            </span>
-            <span className="text-xs text-indigo-200 font-semibold hidden sm:inline">
-              {exploredSeasons.length}/4 Estações exploradas
-            </span>
-          </div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            {SEASONS_DATA.map((season) => {
-              const isSelected = season.id === selectedSouthId;
-              const isVisited = exploredSeasons.includes(season.id);
-              const oppositeName = SEASONS_DATA.find((s) => s.id === OPPOSITE_SEASON_MAP[season.id])?.name;
-
-              return (
-                <button
-                  key={season.id}
-                  type="button"
-                  onClick={() => handleSelectSeason(season.id)}
-                  className={`p-3.5 sm:p-4 rounded-2xl border-4 text-left transition-all flex flex-col justify-between cursor-pointer ${
-                    isSelected
-                      ? 'bg-gradient-to-br from-amber-400 to-amber-500 text-slate-950 border-white shadow-xl scale-[1.03] ring-4 ring-amber-400/40'
-                      : 'bg-white/10 hover:bg-white/20 text-white border-white/20 hover:border-white/40'
-                  }`}
-                >
-                  <div className="flex items-center justify-between w-full mb-1.5">
-                    <span className="text-3xl">{season.emoji}</span>
-                    {isVisited && (
-                      <CheckCircle2
-                        className={`w-4 h-4 ${
-                          isSelected ? 'text-emerald-900' : 'text-emerald-400'
-                        }`}
-                      />
-                    )}
-                  </div>
-                  <div>
-                    <span
-                      className={`text-[10px] font-black uppercase block tracking-wider ${
-                        isSelected ? 'text-amber-950/80' : 'text-indigo-200'
-                      }`}
-                    >
-                      No Sul:
-                    </span>
-                    <span className="text-base sm:text-lg font-black leading-tight block">
-                      {season.name}
-                    </span>
-                    <span
-                      className={`text-[10px] font-bold mt-1 block ${
-                        isSelected ? 'text-amber-900' : 'text-slate-300'
-                      }`}
-                    >
-                      (No Norte: {oppositeName})
-                    </span>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* BANNER DINÂMICO DE SINCRONIZAÇÃO */}
-        <div className="p-4 rounded-2xl bg-white/10 border border-white/20 flex flex-wrap items-center justify-between gap-3">
-          <div className="flex items-center gap-3">
-            <ArrowRightLeft className="w-5 h-5 text-amber-300 shrink-0" />
-            <p className="text-xs sm:text-sm font-bold text-white">
-              A árvore abaixo está no <strong>{viewHemisphere === 'sul' ? 'Hemisfério Sul (Brasil)' : 'Hemisfério Norte (Portugal)'}</strong> exibindo o <strong>{effectiveSeasonData.name}</strong> ({effectiveSeasonData.emoji})!
-            </p>
-          </div>
-
-          <button
-            type="button"
-            onClick={() => handleToggleHemisphereView(viewHemisphere === 'sul' ? 'norte' : 'sul')}
-            className="px-4 py-2 rounded-full bg-amber-400 hover:bg-amber-300 text-amber-950 font-black text-xs transition-transform hover:scale-105 flex items-center gap-2 cursor-pointer shadow-md"
-          >
-            <RotateCcw className="w-3.5 h-3.5" />
-            <span>
-              Ver Árvore no Hemisfério {viewHemisphere === 'sul' ? 'Norte 🇵🇹' : 'Sul 🇧🇷'}
-            </span>
-          </button>
-        </div>
-      </div>
-
       {/* SEÇÃO 1: SIMULAÇÃO BOTÂNICA 60 FPS DA ÁRVORE DAS ESTAÇÕES */}
       <div className="bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 rounded-3xl p-6 sm:p-8 border-4 border-emerald-300 shadow-xl space-y-6">
         <div className="flex flex-wrap items-center justify-between gap-4">
@@ -381,16 +208,16 @@ export const SeasonsCompare: React.FC = () => {
             </div>
             <div>
               <span className="text-xs font-black uppercase tracking-wider text-emerald-800 bg-emerald-200/80 px-3 py-0.5 rounded-full inline-block mb-1">
-                Laboratório Vivo da Natureza · Visão: {viewHemisphere === 'sul' ? 'Hemisfério Sul' : 'Hemisfério Norte'}
+                Laboratório Vivo da Natureza
               </span>
-              <h3 className="text-2xl font-black text-slate-900">
-                A Árvore Viva: Nascimento, Maturidade, Envelhecimento e Queda
+              <h3 className="text-2xl sm:text-3xl font-black text-slate-900">
+                A Árvore Viva: O Ciclo das Quatro Estações
               </h3>
             </div>
           </div>
 
           <AudioButton
-            text={`Observa a árvore sob o clima de ${effectiveSeasonData.name} no Hemisfério ${viewHemisphere === 'sul' ? 'Sul' : 'Norte'}. Na primavera nascem brotos e flores; no verão a copa tem folhas verdes exuberantes; no outono as folhas amarelam e caem suavemente com o vento; e no inverno a árvore descansa desprovida de folhas.`}
+            text={`Observe a árvore sob o clima de ${effectiveSeasonData.name}. Na primavera nascem brotos e flores; no verão a copa tem folhas verdes exuberantes; no outono as folhas amarelam e caem suavemente com o vento; e no inverno a árvore descansa desprovida de folhas.`}
             label="Ouvir explicação da árvore"
             size="sm"
           />
@@ -491,13 +318,7 @@ export const SeasonsCompare: React.FC = () => {
         {/* Comparação Lado a Lado */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {/* Cartão Hemisfério Sul */}
-          <div
-            className={`rounded-3xl p-6 border-4 transition-all ${
-              viewHemisphere === 'sul'
-                ? 'bg-gradient-to-br from-emerald-950/80 to-slate-900 border-emerald-400 shadow-xl ring-2 ring-emerald-400/50'
-                : 'bg-white/5 border-white/20 opacity-85'
-            }`}
-          >
+          <div className="rounded-3xl p-6 border-4 bg-gradient-to-br from-emerald-950/80 to-slate-900 border-emerald-400 shadow-xl ring-2 ring-emerald-400/40">
             <div className="flex items-center justify-between mb-3">
               <span className="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 font-black text-xs border border-emerald-400/30 flex items-center gap-1.5">
                 <span>👇</span>
@@ -526,13 +347,7 @@ export const SeasonsCompare: React.FC = () => {
           </div>
 
           {/* Cartão Hemisfério Norte (Oposto!) */}
-          <div
-            className={`rounded-3xl p-6 border-4 transition-all ${
-              viewHemisphere === 'norte'
-                ? 'bg-gradient-to-br from-purple-950/80 to-slate-900 border-purple-400 shadow-xl ring-2 ring-purple-400/50'
-                : 'bg-white/5 border-white/20 opacity-85'
-            }`}
-          >
+          <div className="rounded-3xl p-6 border-4 bg-gradient-to-br from-purple-950/80 to-slate-900 border-purple-400 shadow-xl ring-2 ring-purple-400/40">
             <div className="flex items-center justify-between mb-3">
               <span className="px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 font-black text-xs border border-purple-400/30 flex items-center gap-1.5">
                 <span>👆</span>
@@ -678,7 +493,7 @@ export const SeasonsCompare: React.FC = () => {
                 Mestre das Estações Desbloqueado!
               </h5>
               <p className="text-xs sm:text-sm text-emerald-100">
-                Compreendeste na perfeição o espelho planetário e o ciclo botânico da Terra!
+                Você compreendeu perfeitamente o espelho planetário e o ciclo botânico da Terra!
               </p>
             </motion.div>
           )}

@@ -496,7 +496,7 @@ export const MissionBadge: React.FC<MissionBadgeProps> = ({
               fontWeight="900"
               letterSpacing="0.8"
             >
-              ASTRÓNOMO CHEFE
+              ASTRÔNOMO CHEFE
             </text>
           </g>
         );
